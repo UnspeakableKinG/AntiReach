@@ -64,7 +64,6 @@ public class API {
         this.loadValues();
         this.setDefault();
         this.register();
-        //Titten
 
         Utils.instance.consoleMessage("§7Plugin sucessfully loaded", TYPE.MESSAGE);
         Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
