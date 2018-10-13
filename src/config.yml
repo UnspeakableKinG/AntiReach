@@ -1,0 +1,46 @@
+#      _              _     _   ____                          _
+#     / \     _ __   | |_  (_) |  _ \    ___    __ _    ___  | |__
+#    / _ \   | '_ \  | __| | | | |_) |  / _ \  / _` |  / __| | '_ \
+#   / ___ \  | | | | | |_  | | |  _ <  |  __/ | (_| | | (__  | | | |
+#  /_/   \_\ |_| |_|  \__| |_| |_| \_\  \___|  \__,_|  \___| |_| |_|
+#  A free and high quality Anti Reach solution
+
+#<p> is replaceable to ● and <s> is replaceable to ┃
+#<pk> is replaceable to •
+#>> is replaceable to »
+#<<  is replaceable to «
+#<st> is replaceable to ×
+Prefix: "&4<pk>&c<p> &cAntiReach &8<s>"
+
+General:
+  #Here are the important news.
+  #Message come when someone makes / ac and has no rights.
+  own-permissions-message: false
+  NoPermissions: "%prefix% &cYou dont have permissions to do that."
+  #Message comes when the console / ac does.
+  NoPlayer: "%prefix% &cYou must be a player to execute this command."
+  #Message comes when a player is kicked for increased range.
+  #In addition, there is the %reach% as a variable for the range.
+  kickMessage: "%prefix% &cWe have detectet you with reach! &7[&e%reach%&7]"
+
+Messages:
+  #Standard messages can be changed here.
+  #Color codes are indicated with & and are thus translated
+  List: "%prefix% &7List was sucessfully cleared."
+  Plugin: "%prefix% &7Plugin was sucessfully reloaded"
+
+Permissions:
+  #Not covered by this system.
+  bypass: "AntiReach.bypass"
+  #Can execute all commands and is not captured by this system. | also get the Verbose messages from the system.
+  admin: "AntiReach.admin"
+  #Get only the verbose messages from the system.
+  verbose: "AntiReach.verbose"
+
+Settings:
+  #Can spam the console full of news.
+  #Use it at your own risk!
+  console-log: false
+  #send a message to all players when a player get kicked
+  all-message: false
+  all-message-message: "%prefix% &e%name% &7was detectet with reach. &7[&e%reach%&7]"

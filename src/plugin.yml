@@ -1,0 +1,13 @@
+name: AntiReach
+version: 4.0-BETA-R2
+description: a free and high quality anti reach solution
+author: SquareCode
+authors: [Tomekk, reax]
+main: net.square.main.AntiReach
+database: false
+website: https://www.spigotmc.org/members/squarecode.564161/
+
+commands:
+  antireach:
+    description: Main command of the plugin
+    aliases: [ac, ar]
