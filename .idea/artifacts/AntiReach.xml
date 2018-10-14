@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AntiReach">
+    <output-path>$USER_HOME$/Desktop/Server/plugins</output-path>
+    <root id="archive" name="AntiReach.jar">
+      <element id="module-output" name="AntiReach" />
+    </root>
+  </artifact>
+</component>
