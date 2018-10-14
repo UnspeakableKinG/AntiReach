@@ -54,6 +54,7 @@ public class API {
     }
 
     public void onStart() {
+        // on start methode
         Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
         Utils.instance.consoleMessage("§7Plugin trying to start...", TYPE.MESSAGE);
         ConfigManager.instance.createConfig();
@@ -61,6 +62,7 @@ public class API {
     }
 
     public void startSession() {
+        // start session method
         this.loadValues();
         this.setDefault();
         this.register();
