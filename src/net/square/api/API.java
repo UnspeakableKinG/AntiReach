@@ -18,6 +18,14 @@ import java.util.UUID;
 
 public class API {
 
+    /*-------------------------------------------------------------------------------------------------------*/
+
+    /**
+     * This is the main class in the system.
+     * Everything is controlled and everything set.
+     * If this class is missing, the whole plugin will not work anymore.
+     */
+
     public static API instance;
     public HashMap<UUID, Integer> VL = new HashMap<>();
     public String cpr = "§8| §cINFO §8|  ";
@@ -36,8 +44,16 @@ public class API {
     public boolean consolelog;
     public boolean allmessage;
     public boolean ownmessage;
+    /*-------------------------------------------------------------------------------------------------------*/
 
     public void loadValues() {
+
+        /**
+         * From this method, all values ​​are loaded from the Config.yml.
+         * The config is created in the ConfigManager.
+         * (net.square.config.ConfigManager)
+         */
+
         prefix = ConfigManager.instance.fileconfig.getString("Prefix").replace("<s>", "┃").replace("<p>", "●").replace("<pk>", "•").replace(">>", "»").replace("<<", "«").replace("<st>", "×").replace("&", "§");
         noperm = ConfigManager.instance.fileconfig.getString("General.NoPermissions").replace("&", "§").replace("%prefix%", prefix);
         noplayer = ConfigManager.instance.fileconfig.getString("General.NoPlayer").replace("&", "§").replace("%prefix%", prefix);
@@ -72,6 +88,11 @@ public class API {
     }
 
     public void register() {
+
+        /**
+         * Here are all Commands & Events in
+         * imported to the plugin.
+         */
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new JoinListener(), AntiReach.instace);
         pm.registerEvents(new QuitListener(), AntiReach.instace);
@@ -81,6 +102,10 @@ public class API {
     }
 
     public void setDefault() {
+
+        /**
+         * here the default values ​​for each player are set in the hashMap.
+         */
         for (Player all : Bukkit.getOnlinePlayers()) {
             if (!VL.containsKey(all.getUniqueId())) {
                 VL.put(all.getUniqueId(), 0);
@@ -93,6 +118,17 @@ public class API {
     }
 
     public void pokeReach(String player, String description, String distance, int VL, int ping, double tps, String safe) {
+
+        /**
+         * Probably the most important method in the plugin.
+         * Here the people in the game are sent the message that someone uses a higher range.
+         * The whole thing is associated with queries that are recognized as Booleans.
+         * These are anchored in the API class.
+         * They can be set via the Config.yml which is created in the ConfigManager.
+         * (net.square.config.ConfigManager)
+         */
+
+
         if (API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()).equals(5)) {
             if (consolelog) {
                 if (allmessage) {

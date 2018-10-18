@@ -24,6 +24,8 @@ public class Utils {
             Bukkit.getConsoleSender().sendMessage("§7[§9" + date + "§7] " + API.instance.cpr + message);
         } else if (type.equals(TYPE.ERROR)) {
             Bukkit.getConsoleSender().sendMessage("§7[§9" + date + "§7] " + API.instance.cprF + "§cAn error has occured: " + message);
+        } else if (type.equals(TYPE.EMPTY)) {
+            Bukkit.getConsoleSender().sendMessage("§7[§9" + date + "§7] " + API.instance.cpr + "");
         }
     }
 }

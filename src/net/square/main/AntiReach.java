@@ -12,6 +12,11 @@ public class AntiReach extends JavaPlugin {
 
     public void onEnable() {
 
+        /**
+         * The main class in the system. However, it only serves to load the API start method in the onEnable.
+         * Here, however, the three main classes are set as a fixed instance.
+         */
+
         instace = this;
         new API().setInstance();
         new ConfigManager().setInstance();
