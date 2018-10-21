@@ -1,6 +1,7 @@
 package net.square.main;
 
 import net.square.api.API;
+import net.square.api.AntiReachAPI;
 import net.square.config.ConfigManager;
 import net.square.utils.TYPE;
 import net.square.utils.Utils;
@@ -21,6 +22,7 @@ public class AntiReach extends JavaPlugin {
         new API().setInstance();
         new ConfigManager().setInstance();
         new Utils().setInstance();
+        new AntiReachAPI().setInstance();
 
         try {
             API.instance.onStart();
