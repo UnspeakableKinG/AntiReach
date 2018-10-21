@@ -24,8 +24,8 @@ public class AntiReachAPI {
         API.instance.VL.put(player.getUniqueId(), 0);
     }
 
-    public static Integer addVL(final Player player) {
-        return API.instance.VL.put(player.getUniqueId(), API.instance.VL.get(player.getUniqueId()) +1);
+    public static void addVL(final Player player) {
+        API.instance.VL.put(player.getUniqueId(), API.instance.VL.get(player.getUniqueId()) +1);
     }
 
     public static void clearMap() {
