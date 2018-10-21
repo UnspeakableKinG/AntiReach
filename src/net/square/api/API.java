@@ -41,6 +41,7 @@ public class API {
     public String list;
     public String plugin;
     public String allmessagem;
+    public int Leveltokick;
     public boolean consolelog;
     public boolean allmessage;
     public boolean ownmessage;
@@ -67,6 +68,7 @@ public class API {
         allmessage = ConfigManager.instance.fileconfig.getBoolean("Settings.all-message");
         allmessagem = ConfigManager.instance.fileconfig.getString("Settings.all-message-message").replace("&", "§").replace("%prefix%", prefix);
         ownmessage = ConfigManager.instance.fileconfig.getBoolean("General.own-permissions-message");
+        Leveltokick = ConfigManager.instance.fileconfig.getInt("General.level-to-kick");
     }
 
     public void onStart() {
@@ -129,7 +131,7 @@ public class API {
          */
 
 
-        if (API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()).equals(5)) {
+        if (API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()).equals(Leveltokick)) {
             if (consolelog) {
                 if (allmessage) {
                     Bukkit.getPlayer(player).kickPlayer(kickMessage.replace("%reach%", distance));
