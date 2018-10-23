@@ -21,7 +21,8 @@ General:
   NoPlayer: "%prefix% &cYou must be a player to execute this command."
   #Message comes when a player is kicked for increased range.
   #In addition, there is the %reach% as a variable for the range.
-  kickMessage: "%prefix% &cWe have detectet you with reach! &7[&e%reach%&7]"
+  #%name% for the player name so far he is online
+  kick-command: "kick %name% %prefix% &cWe have detectet you with reach! &7[&e%reach%&7]"
   #When a player reaches this level, he is automatically kicked.
   level-to-kick: 10
 

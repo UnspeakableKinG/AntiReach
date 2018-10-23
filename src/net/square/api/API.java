@@ -30,14 +30,15 @@ public class API {
     public HashMap<UUID, Integer> VL = new HashMap<>();
     public String cpr = "§8| §cINFO §8|  ";
     public String cprF = "§8| §cERROR §8|  ";
-    public String Stripline = "§8=========================| §cANTIREACH §8|=========================";
+    public String Stripline = "┌───────────────────────────────────────";
+    public String Stripline2 = "└───────────────────────────────────────";
     public String bypass;
     public String admin;
     public String verbose;
     public String prefix;
     public String noperm;
     public String noplayer;
-    public String kickMessage;
+    public String kickcommand;
     public String list;
     public String plugin;
     public String allmessagem;
@@ -58,7 +59,7 @@ public class API {
         prefix = ConfigManager.instance.fileconfig.getString("Prefix").replace("<s>", "┃").replace("<p>", "●").replace("<pk>", "•").replace(">>", "»").replace("<<", "«").replace("<st>", "×").replace("&", "§");
         noperm = ConfigManager.instance.fileconfig.getString("General.NoPermissions").replace("&", "§").replace("%prefix%", prefix);
         noplayer = ConfigManager.instance.fileconfig.getString("General.NoPlayer").replace("&", "§").replace("%prefix%", prefix);
-        kickMessage = ConfigManager.instance.fileconfig.getString("General.kickMessage").replace("&", "§").replace("%prefix%", prefix);
+        kickcommand = ConfigManager.instance.fileconfig.getString("General.kick-command").replace("&", "§").replace("%prefix%", prefix);
         bypass = ConfigManager.instance.fileconfig.getString("Permissions.bypass");
         admin = ConfigManager.instance.fileconfig.getString("Permissions.admin");
         verbose = ConfigManager.instance.fileconfig.getString("Permissions.verbose");
@@ -74,19 +75,21 @@ public class API {
     public void onStart() {
         // on start methode
         Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
-        Utils.instance.consoleMessage("§7Plugin trying to start...", TYPE.MESSAGE);
+        Utils.instance.consoleMessage("├ INFO | » §7Starting plugin...", TYPE.MESSAGE);
         ConfigManager.instance.createConfig();
+        Utils.instance.consoleMessage("├ INFO | » §7Config loaded", TYPE.MESSAGE);
         this.startSession();
     }
 
     public void startSession() {
         // start session method
         this.loadValues();
+        Utils.instance.consoleMessage("├ INFO | » §7Values loaded", TYPE.MESSAGE);
         this.setDefault();
+        Utils.instance.consoleMessage("├ INFO | » §7defaults set", TYPE.MESSAGE);
         this.register();
-
-        Utils.instance.consoleMessage("§7Plugin sucessfully loaded", TYPE.MESSAGE);
-        Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
+        Utils.instance.consoleMessage("├ INFO | » §7Commands registred", TYPE.MESSAGE);
+        Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
     }
 
     public void register() {
@@ -134,23 +137,23 @@ public class API {
         if (API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()).equals(Leveltokick)) {
             if (consolelog) {
                 if (allmessage) {
-                    Bukkit.getPlayer(player).kickPlayer(kickMessage.replace("%reach%", distance));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
                     Bukkit.getConsoleSender().sendMessage(cpr + "§e" + player + "§7 was kicked for reach. (reach:" + distance + ")");
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         all.sendMessage(allmessagem.replace("%name%", player).replace("%reach%", distance));
                     }
                 } else {
-                    Bukkit.getPlayer(player).kickPlayer(kickMessage.replace("%reach%", distance));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
                     Bukkit.getConsoleSender().sendMessage(cpr + "§e" + player + "§7 was kicked for reach. (reach:" + distance + ")");
                 }
             } else {
                 if (allmessage) {
-                    Bukkit.getPlayer(player).kickPlayer(kickMessage.replace("%reach%", distance));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         all.sendMessage(allmessagem.replace("%name%", player).replace("%reach%", distance));
                     }
                 } else {
-                    Bukkit.getPlayer(player).kickPlayer(kickMessage.replace("%reach%", distance));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
                 }
             }
 

@@ -21,11 +21,11 @@ public class Utils {
         String date = dateFormat.format(new Date());
 
         if (type.equals(TYPE.MESSAGE)) {
-            Bukkit.getConsoleSender().sendMessage("§7[§9" + date + "§7] " + API.instance.cpr + message);
+            Bukkit.getConsoleSender().sendMessage(""+message);
         } else if (type.equals(TYPE.ERROR)) {
-            Bukkit.getConsoleSender().sendMessage("§7[§9" + date + "§7] " + API.instance.cprF + "§cAn error has occured: " + message);
+            Bukkit.getConsoleSender().sendMessage("§cAn error has occured: " + message);
         } else if (type.equals(TYPE.EMPTY)) {
-            Bukkit.getConsoleSender().sendMessage("§7[§9" + date + "§7] " + API.instance.cpr + "");
+            Bukkit.getConsoleSender().sendMessage("");
         }
     }
 }
