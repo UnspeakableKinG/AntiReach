@@ -27,8 +27,8 @@ public class antireach_Command implements CommandExecutor {
 
                     } else if (args[0].equalsIgnoreCase("reload")) {
 
-                        Bukkit.getPluginManager().disablePlugin(AntiReach.instace);
-                        Bukkit.getPluginManager().enablePlugin(AntiReach.instace);
+                        Bukkit.getPluginManager().disablePlugin(AntiReach.instance);
+                        Bukkit.getPluginManager().enablePlugin(AntiReach.instance);
                         p.sendMessage(API.instance.plugin);
 
                     } else {
@@ -46,7 +46,7 @@ public class antireach_Command implements CommandExecutor {
                     p.sendMessage(" ");
                     p.sendMessage("§8§m--------------------------------------------------------");
                     p.sendMessage(API.instance.prefix + " §7Antireach-system by §e§oSquareCode");
-                    p.sendMessage(API.instance.prefix + " §7Version§8: §e§o" + AntiReach.instace.getDescription().getVersion());
+                    p.sendMessage(API.instance.prefix + " §7Version§8: §e§o" + AntiReach.instance.getDescription().getVersion());
                     p.sendMessage(API.instance.prefix + " §7§oa free and high quality antireach solution");
                     p.sendMessage("§8§m--------------------------------------------------------");
                     p.sendMessage(" ");

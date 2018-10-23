@@ -1,14 +1,8 @@
 package net.square.utils;
 
-import net.square.api.API;
 import org.bukkit.Bukkit;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Utils {
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
 
     public static Utils instance;
 
@@ -17,8 +11,6 @@ public class Utils {
     }
 
     public void consoleMessage(Object message, TYPE type) {
-
-        String date = dateFormat.format(new Date());
 
         if (type.equals(TYPE.MESSAGE)) {
             Bukkit.getConsoleSender().sendMessage(""+message);

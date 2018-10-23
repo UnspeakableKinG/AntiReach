@@ -99,11 +99,11 @@ public class API {
          * imported to the plugin.
          */
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new JoinListener(), AntiReach.instace);
-        pm.registerEvents(new QuitListener(), AntiReach.instace);
-        pm.registerEvents(new Check(), AntiReach.instace);
+        pm.registerEvents(new JoinListener(), AntiReach.instance);
+        pm.registerEvents(new QuitListener(), AntiReach.instance);
+        pm.registerEvents(new Check(), AntiReach.instance);
 
-        AntiReach.instace.getCommand("antireach").setExecutor(new antireach_Command());
+        AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
 
     public void setDefault() {
