@@ -4,6 +4,7 @@ import net.square.api.API;
 import net.square.api.AntiReachAPI;
 import net.square.config.ConfigManager;
 import net.square.utils.MathUtil;
+import net.square.utils.TPSManager;
 import net.square.utils.TYPE;
 import net.square.utils.Utils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public class AntiReach extends JavaPlugin {
         new Utils().setInstance();
         new AntiReachAPI().setInstance();
         new MathUtil().setInstance();
+        new TPSManager().setInstance();
 
         try {
             API.instance.onStart();

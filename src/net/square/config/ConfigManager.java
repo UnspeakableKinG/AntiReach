@@ -11,7 +11,7 @@ public class ConfigManager {
         instance = this;
     }
 
-    private AntiReach plugin = AntiReach.instace;
+    private AntiReach plugin = AntiReach.instance;
 
     public FileConfiguration fileconfig = null;
 

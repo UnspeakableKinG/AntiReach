@@ -1,6 +1,8 @@
 package net.square.api;
 
 import net.square.check.Check;
+import net.square.check.ReachType;
+import net.square.check.reach_a;
 import net.square.commands.antireach_Command;
 import net.square.config.ConfigManager;
 import net.square.event.JoinListener;
@@ -89,7 +91,13 @@ public class API {
         Utils.instance.consoleMessage("├ INFO | » §7defaults set", TYPE.MESSAGE);
         this.register();
         Utils.instance.consoleMessage("├ INFO | » §7Commands registred", TYPE.MESSAGE);
+        this.registerChecks();
+        Utils.instance.consoleMessage("├ INFO | » §7Checks registred", TYPE.MESSAGE);
         Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
+    }
+
+    public void registerChecks( ){
+        reach_a reachA = new reach_a();
     }
 
     public void register() {
@@ -101,7 +109,8 @@ public class API {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new JoinListener(), AntiReach.instance);
         pm.registerEvents(new QuitListener(), AntiReach.instance);
-        pm.registerEvents(new Check(), AntiReach.instance);
+
+        //pm.registerEvents(new reach_a(), AntiReach.instance);
 
         AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
@@ -122,9 +131,9 @@ public class API {
         instance = this;
     }
 
-    public void pokeReach(String player, String description, String distance, int VL, int ping, double tps, String safe) {
+    public void pokeReach(String player, String description, String distance, int VL, int ping, double tps, String safe, ReachType type) {
 
-        /**
+        /*
          * Probably the most important method in the plugin.
          * Here the people in the game are sent the message that someone uses a higher range.
          * The whole thing is associated with queries that are recognized as Booleans.
@@ -163,10 +172,10 @@ public class API {
         for (Player all : Bukkit.getOnlinePlayers()) {
             if (all.hasPermission(API.instance.verbose) || all.hasPermission(API.instance.admin)) {
                 if (consolelog) {
-                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + "] VL:" + VL);
-                    Bukkit.getConsoleSender().sendMessage(cpr + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + "] VL:" + VL);
+                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + "check: "+type+"] VL:" + VL);
+                    Bukkit.getConsoleSender().sendMessage(cpr + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + " check: "+type+"] VL:" + VL);
                 } else {
-                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + "] VL:" + VL);
+                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + " check: "+type+"] VL:" + VL);
                 }
             }
         }
