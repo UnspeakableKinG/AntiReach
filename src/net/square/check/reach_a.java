@@ -16,7 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class reach_a extends Check {
 
     public reach_a() {
-        super("Reach_A", ReachType.A, true);
+        super("Reach_A", ReachType.A, HackType.COMBAT, true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -45,32 +45,32 @@ public class reach_a extends Check {
                             /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
                             if (distance > 6) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "100%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 5.5) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "100%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 5) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "100%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 4.5) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "80%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 4.4) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "65%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 4.3) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "50%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 4.2) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "35%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                                 event.setCancelled(true);
                             } else if (distance > 4.1) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "20%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                             } else if (distance > 4.0) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "10%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                             } else if (distance > 3.9) {
-                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, "5%", ReachType.A);
+                                API.instance.pokeReach(player.getName(), "too high hit range", ddistance, API.instance.VL.get(player.getUniqueId()), ping, tps, ReachType.A);
                             }
                         }
                     }

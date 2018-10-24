@@ -3,6 +3,7 @@ package net.square.api;
 import net.square.check.Check;
 import net.square.check.ReachType;
 import net.square.check.reach_a;
+import net.square.check.reach_b;
 import net.square.commands.antireach_Command;
 import net.square.config.ConfigManager;
 import net.square.event.JoinListener;
@@ -98,6 +99,7 @@ public class API {
 
     public void registerChecks( ){
         reach_a reachA = new reach_a();
+        reach_b reachB = new reach_b();
     }
 
     public void register() {
@@ -131,7 +133,7 @@ public class API {
         instance = this;
     }
 
-    public void pokeReach(String player, String description, String distance, int VL, int ping, double tps, String safe, ReachType type) {
+    public void pokeReach(String player, String description, String distance, int VL, int ping, double tps, ReachType type) {
 
         /*
          * Probably the most important method in the plugin.
@@ -172,10 +174,10 @@ public class API {
         for (Player all : Bukkit.getOnlinePlayers()) {
             if (all.hasPermission(API.instance.verbose) || all.hasPermission(API.instance.admin)) {
                 if (consolelog) {
-                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + "check: "+type+"] VL:" + VL);
-                    Bukkit.getConsoleSender().sendMessage(cpr + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + " check: "+type+"] VL:" + VL);
+                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " check: "+type+"] VL:" + VL);
+                    Bukkit.getConsoleSender().sendMessage(cpr + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " check: "+type+"] VL:" + VL);
                 } else {
-                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " safe:" + safe + " check: "+type+"] VL:" + VL);
+                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " check: "+type+"] VL:" + VL);
                 }
             }
         }

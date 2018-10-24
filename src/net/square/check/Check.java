@@ -13,9 +13,10 @@ public abstract class Check implements Listener {
 
     public String name;
     public ReachType type;
+    public HackType type2;
     public boolean enabled;
 
-    public Check(final String name, ReachType type, boolean enabled) {
+    public Check(final String name, ReachType type, HackType type2, boolean enabled) {
         this.name = name;
         this.enabled = enabled;
         this.type = type;
