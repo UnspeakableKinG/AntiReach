@@ -14,5 +14,8 @@ public class QuitListener implements Listener {
         if (API.instance.VL.containsKey(p.getUniqueId())) {
             API.instance.VL.remove(p.getUniqueId(), API.instance.VL.get(p.getUniqueId()));
         }
+        if (API.instance.verbosemode.contains(p.getName())) {
+            API.instance.verbosemode.remove(p.getName());
+        }
     }
 }

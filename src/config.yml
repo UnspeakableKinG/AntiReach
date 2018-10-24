@@ -22,7 +22,7 @@ General:
   #Message comes when a player is kicked for increased range.
   #In addition, there is the %reach% as a variable for the range.
   #%name% for the player name so far he is online
-  kick-command: "kick %name% %prefix% &cWe have detectet you with reach! &7[&e%reach%&7]"
+  kick-command: "kick %name% %prefix% &cWe have detected you with reach! &8[&c%reach%&8]"
   #When a player reaches this level, he is automatically kicked.
   level-to-kick: 10
 
@@ -44,6 +44,3 @@ Settings:
   #Can spam the console full of news.
   #Use it at your own risk!
   console-log: false
-  #send a message to all players when a player get kicked
-  all-message: false
-  all-message-message: "%prefix% &e%name% &7was detectet with reach. &7[&e%reach%&7]"

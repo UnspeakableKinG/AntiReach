@@ -1,9 +1,6 @@
 package net.square.api;
 
-import net.square.check.Check;
-import net.square.check.ReachType;
 import net.square.check.reach_a;
-import net.square.check.reach_b;
 import net.square.commands.antireach_Command;
 import net.square.config.ConfigManager;
 import net.square.event.JoinListener;
@@ -16,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -31,8 +29,8 @@ public class API {
 
     public static API instance;
     public HashMap<UUID, Integer> VL = new HashMap<>();
+    public ArrayList<String> verbosemode = new ArrayList<>();
     public String cpr = "§8| §cINFO §8|  ";
-    public String cprF = "§8| §cERROR §8|  ";
     public String Stripline = "┌───────────────────────────────────────";
     public String Stripline2 = "└───────────────────────────────────────";
     public String bypass;
@@ -44,10 +42,8 @@ public class API {
     public String kickcommand;
     public String list;
     public String plugin;
-    public String allmessagem;
     public int Leveltokick;
     public boolean consolelog;
-    public boolean allmessage;
     public boolean ownmessage;
     /*-------------------------------------------------------------------------------------------------------*/
 
@@ -69,8 +65,6 @@ public class API {
         list = ConfigManager.instance.fileconfig.getString("Messages.List").replace("&", "§").replace("%prefix%", prefix);
         plugin = ConfigManager.instance.fileconfig.getString("Messages.Plugin").replace("&", "§").replace("%prefix%", prefix);
         consolelog = ConfigManager.instance.fileconfig.getBoolean("Settings.console-log");
-        allmessage = ConfigManager.instance.fileconfig.getBoolean("Settings.all-message");
-        allmessagem = ConfigManager.instance.fileconfig.getString("Settings.all-message-message").replace("&", "§").replace("%prefix%", prefix);
         ownmessage = ConfigManager.instance.fileconfig.getBoolean("General.own-permissions-message");
         Leveltokick = ConfigManager.instance.fileconfig.getInt("General.level-to-kick");
     }
@@ -97,9 +91,8 @@ public class API {
         Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
     }
 
-    public void registerChecks( ){
-        reach_a reachA = new reach_a();
-        reach_b reachB = new reach_b();
+    public void registerChecks() {
+        Bukkit.getPluginManager().registerEvents(new reach_a(), AntiReach.instance);
     }
 
     public void register() {
@@ -111,8 +104,6 @@ public class API {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new JoinListener(), AntiReach.instance);
         pm.registerEvents(new QuitListener(), AntiReach.instance);
-
-        //pm.registerEvents(new reach_a(), AntiReach.instance);
 
         AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
@@ -133,51 +124,45 @@ public class API {
         instance = this;
     }
 
-    public void pokeReach(String player, String description, String distance, int VL, int ping, double tps, ReachType type) {
+    public void pokeReach(String player, String description, String distance, int VL, int ping, double tps) {
 
-        /*
-         * Probably the most important method in the plugin.
-         * Here the people in the game are sent the message that someone uses a higher range.
-         * The whole thing is associated with queries that are recognized as Booleans.
-         * These are anchored in the API class.
-         * They can be set via the Config.yml which is created in the ConfigManager.
-         * (net.square.config.ConfigManager)
-         */
-
-
-        if (API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()).equals(Leveltokick)) {
-            if (consolelog) {
-                if (allmessage) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
-                    Bukkit.getConsoleSender().sendMessage(cpr + "§e" + player + "§7 was kicked for reach. (reach:" + distance + ")");
-                    for (Player all : Bukkit.getOnlinePlayers()) {
-                        all.sendMessage(allmessagem.replace("%name%", player).replace("%reach%", distance));
+        if (API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()) == Leveltokick) {
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    if (consolelog) {
+                       if(API.instance.verbosemode.contains(all.getName())) {
+                           all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "] VL:" + VL);
+                       }
+                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "] VL:" + VL);
+                    } else {
+                        if(API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "] VL:" + VL);
+                        }
                     }
-                } else {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
-                    Bukkit.getConsoleSender().sendMessage(cpr + "§e" + player + "§7 was kicked for reach. (reach:" + distance + ")");
-                }
-            } else {
-                if (allmessage) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
-                    for (Player all : Bukkit.getOnlinePlayers()) {
-                        all.sendMessage(allmessagem.replace("%name%", player).replace("%reach%", distance));
-                    }
-                } else {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%prefix%", prefix).replace("%name%", player).replace("%reach%", distance));
                 }
             }
-
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    all.sendMessage(prefix + "§a [CONSOLE] §7" + player + " §7was kicked for Reach hacking§8. §7VL§8: §7" + API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()));
+                    Bukkit.getConsoleSender().sendMessage(prefix + "§a [CONSOLE] §7" + player + " §7was kicked for Reach hacking§8. §7VL§8: §7" + API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()));
+                }
+            }
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), kickcommand.replace("%name%", player).replace("%prefix%", prefix).replace("%reach%", distance));
         } else {
             API.instance.VL.put(Bukkit.getPlayer(player).getUniqueId(), API.instance.VL.get(Bukkit.getPlayer(player).getUniqueId()) + 1);
-        }
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (all.hasPermission(API.instance.verbose) || all.hasPermission(API.instance.admin)) {
-                if (consolelog) {
-                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " check: "+type+"] VL:" + VL);
-                    Bukkit.getConsoleSender().sendMessage(cpr + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " check: "+type+"] VL:" + VL);
-                } else {
-                    all.sendMessage(prefix + " §7" + player + "§7 failed Reach: " + description + " (Range:" + distance + ") [ping:" + ping + " tps:" + tps + " check: "+type+"] VL:" + VL);
+
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    if (consolelog) {
+                        if(API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "] VL:" + VL);
+                        }
+                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "] VL:" + VL);
+                    } else {
+                        if(API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "] VL:" + VL);
+                        }
+                    }
                 }
             }
         }

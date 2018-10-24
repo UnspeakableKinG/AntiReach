@@ -18,6 +18,7 @@ public class antireach_Command implements CommandExecutor {
 
                     p.sendMessage(API.instance.prefix + " §8/§cac <clear>");
                     p.sendMessage(API.instance.prefix + " §8/§cac <reload>");
+                    p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
 
                 } else if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("clear")) {
@@ -31,10 +32,21 @@ public class antireach_Command implements CommandExecutor {
                         Bukkit.getPluginManager().enablePlugin(AntiReach.instance);
                         p.sendMessage(API.instance.plugin);
 
+                    } else if (args[0].equalsIgnoreCase("verbose")) {
+
+                        if (API.instance.verbosemode.contains(p.getName())) {
+                            API.instance.verbosemode.remove(p.getName());
+                            p.sendMessage(API.instance.prefix + "§7 You have §cleft §7the verbose-mode");
+                        } else {
+                            API.instance.verbosemode.add(p.getName());
+                            p.sendMessage(API.instance.prefix + "§7 You have §ajoin §7the verbose-mode");
+                        }
+
                     } else {
 
                         p.sendMessage(API.instance.prefix + " §8/§cac <clear>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <reload>");
+                        p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
 
                     }
                 }
