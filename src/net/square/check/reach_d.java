@@ -7,20 +7,18 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class reach_a implements Listener {
+/**
+ * Copyright © SquareCode 2018
+ * created on: 25.10.2018 / 19:35
+ * Project: AntiReach
+ */
+public class reach_d implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onHit(EntityDamageByEntityEvent event) {
-
-        /*--------------------------------------------------------------*/
-
+    public void onAttack(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             if (event.getEntityType().isAlive()) {
                 if (event.getEntity().getType() == EntityType.PLAYER) {
@@ -28,12 +26,11 @@ public class reach_a implements Listener {
                     if (player.getGameMode() != GameMode.CREATIVE) {
                         if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
 
-                            /*--------------------------------------------------------------*/
+                            Player P = (Player) event.getDamager();
+                            Location loc = player.getLocation();
+                            Location loc2 = event.getEntity().getLocation();
 
-                            LivingEntity damaged = (LivingEntity) event.getEntity();
-                            Location entityLoc = damaged.getLocation().add(0.0D, damaged.getEyeHeight(), 0.0D);
-                            Location playerLoc = player.getLocation().add(0.0D, player.getEyeHeight(), 0.0D);
-                            double distance = MathUtil.instance.getDistance3D(entityLoc, playerLoc);
+                            double distance = MathUtil.instance.getDistance3D(player.getLocation(), event.getEntity().getLocation());
 
                             /*-------------------------------[ ADDITIVE ]-------------------------------*/
                             int ping = ((CraftPlayer) player).getHandle().ping;
@@ -41,14 +38,12 @@ public class reach_a implements Listener {
                             String ddistance = Double.toString(distance).substring(0, 3);
                             /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
-                            if (distance > API.instance.MAX_REACH_A) {
-                                API.instance.pokeReach(player.getName(), "too high hit range < "+API.instance.MAX_REACH_A, ddistance, ping, tps, ReachType.A);
+                            if(distance > API.instance.MAX_REACH_D) {
+                                API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D, ddistance,  ping, tps, ReachType.D);
                                 event.setCancelled(true);
                             }
                         }
                     }
-                } else {
-                    event.setCancelled(false);
                 }
             }
         }

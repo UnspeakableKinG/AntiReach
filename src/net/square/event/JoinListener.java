@@ -11,8 +11,5 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
-        if (!API.instance.VL.containsKey(p.getUniqueId())) {
-            API.instance.VL.put(p.getUniqueId(), 0);
-        }
     }
 }

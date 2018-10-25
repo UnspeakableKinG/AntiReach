@@ -16,17 +16,11 @@ public class antireach_Command implements CommandExecutor {
             if (p.hasPermission(API.instance.admin)) {
                 if (args.length == 0) {
 
-                    p.sendMessage(API.instance.prefix + " §8/§cac <clear>");
                     p.sendMessage(API.instance.prefix + " §8/§cac <reload>");
                     p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
 
                 } else if (args.length == 1) {
-                    if (args[0].equalsIgnoreCase("clear")) {
-
-                        API.instance.VL.clear();
-                        p.sendMessage(API.instance.list);
-
-                    } else if (args[0].equalsIgnoreCase("reload")) {
+                    if (args[0].equalsIgnoreCase("reload")) {
 
                         Bukkit.getPluginManager().disablePlugin(AntiReach.instance);
                         Bukkit.getPluginManager().enablePlugin(AntiReach.instance);
@@ -44,7 +38,6 @@ public class antireach_Command implements CommandExecutor {
 
                     } else {
 
-                        p.sendMessage(API.instance.prefix + " §8/§cac <clear>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <reload>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
 

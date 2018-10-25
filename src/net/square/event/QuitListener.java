@@ -11,9 +11,6 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
-        if (API.instance.VL.containsKey(p.getUniqueId())) {
-            API.instance.VL.remove(p.getUniqueId(), API.instance.VL.get(p.getUniqueId()));
-        }
         if (API.instance.verbosemode.contains(p.getName())) {
             API.instance.verbosemode.remove(p.getName());
         }

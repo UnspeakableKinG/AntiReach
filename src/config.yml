@@ -29,7 +29,6 @@ General:
 Messages:
   #Standard messages can be changed here.
   #Color codes are indicated with & and are thus translated
-  List: "%prefix% &7List was sucessfully cleared."
   Plugin: "%prefix% &7Plugin was sucessfully reloaded"
 
 Permissions:

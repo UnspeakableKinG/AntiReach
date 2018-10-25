@@ -24,4 +24,10 @@ public class MathUtil {
         toReturn = Math.abs(sqrt);
         return toReturn;
     }
+
+    public static double getHorizontalDistance(final Location to, final Location from) {
+        final double x = Math.abs(Math.abs(to.getX()) - Math.abs(from.getX()));
+        final double z = Math.abs(Math.abs(to.getZ()) - Math.abs(from.getZ()));
+        return Math.sqrt(x * x + z * z);
+    }
 }
