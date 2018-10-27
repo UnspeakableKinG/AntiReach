@@ -43,7 +43,8 @@ public class reach_a implements Listener {
 
                             if (distance > API.instance.MAX_REACH_A) {
                                 API.instance.pokeReach(player.getName(), "too high hit range < "+API.instance.MAX_REACH_A, ddistance, ping, tps, ReachType.A);
-                                event.setCancelled(true);
+                                    event.setCancelled(true);
+
                             }
                         }
                     }

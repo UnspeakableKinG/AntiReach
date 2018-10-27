@@ -9,6 +9,7 @@ import net.square.main.AntiReach;
 import net.square.utils.TYPE;
 import net.square.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 
@@ -44,6 +45,7 @@ public class API {
     public double MAX_REACH_D = 4.2;
     public boolean consolelog;
     public boolean ownmessage;
+    public boolean resetpitch;
     /*-------------------------------------------------------------------------------------------------------*/
 
     public void loadValues() {
@@ -64,6 +66,7 @@ public class API {
         plugin = ConfigManager.instance.fileconfig.getString("Messages.Plugin").replace("&", "§").replace("%prefix%", prefix);
         consolelog = ConfigManager.instance.fileconfig.getBoolean("Settings.console-log");
         ownmessage = ConfigManager.instance.fileconfig.getBoolean("General.own-permissions-message");
+        resetpitch = ConfigManager.instance.fileconfig.getBoolean("Settings.reset-player-pitch");
     }
 
     public void onStart() {
@@ -113,19 +116,44 @@ public class API {
 
     public void pokeReach(String player, String description, String distance, int ping, double tps, ReachType type) {
 
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (all.hasPermission(admin) || all.hasPermission(verbose)) {
-                if (consolelog) {
-                    if (API.instance.verbosemode.contains(all.getName())) {
-                        all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + "Check: " + type + "]");
-                    }
-                    Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
-                } else {
-                    if (API.instance.verbosemode.contains(all.getName())) {
-                        all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " (Range:" + distance + ") [Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+        if(API.instance.resetpitch) {
+            Location loc = Bukkit.getPlayer(player).getLocation();
+            loc.setPitch(-90F);
+            loc.setYaw(-90F);
+            Bukkit.getPlayer(player).teleport(loc);
+
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    if (consolelog) {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                        }
+                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                    } else {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                        }
                     }
                 }
             }
+
+        } else {
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    if (consolelog) {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                        }
+                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                    } else {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                        }
+                    }
+                }
+            }
+
+
         }
     }
 }

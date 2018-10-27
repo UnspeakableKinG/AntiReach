@@ -38,11 +38,16 @@ public class reach_c implements Listener {
 
                             if (event.getEntity().getLocation().distance(player.getLocation()) > API.instance.MAX_REACH_C && player.getLocation().getY() < event.getEntity().getLocation().getY() + 0.1) {
                                 API.instance.pokeReach(player.getName(), "higher range as max < "+API.instance.MAX_REACH_C, ddistance,  ping, tps, ReachType.C);
-                                event.setCancelled(true);
+                                if(API.instance.resetpitch) {
+                                    player.getLocation().setPitch(-90F);
+                                    event.setCancelled(true);
+                                } else {
+                                    event.setCancelled(true);
+                                }
                             }
                             if (event.getEntity().getLocation().distance(player.getLocation()) > API.instance.MAX_REACH_C && player.getLocation().getY() > event.getEntity().getLocation().getY()) {
                                 API.instance.pokeReach(player.getName(), "higher range as max < "+API.instance.MAX_REACH_C, ddistance,  ping, tps, ReachType.C);
-                                event.setCancelled(true);
+                                    event.setCancelled(true);
                             }
                         }
                     }

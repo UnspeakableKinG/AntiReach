@@ -43,3 +43,5 @@ Settings:
   #Can spam the console full of news.
   #Use it at your own risk!
   console-log: false
+  #Set player pitch to -90F on check
+  reset-player-pitch: true

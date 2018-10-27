@@ -31,16 +31,17 @@ public class antireach_Command implements CommandExecutor {
                         if (API.instance.verbosemode.contains(p.getName())) {
                             API.instance.verbosemode.remove(p.getName());
                             p.sendMessage(API.instance.prefix + "§7 You have §cleft §7the verbose-mode");
+
                         } else {
+
                             API.instance.verbosemode.add(p.getName());
                             p.sendMessage(API.instance.prefix + "§7 You have §ajoin §7the verbose-mode");
+
                         }
 
                     } else {
-
                         p.sendMessage(API.instance.prefix + " §8/§cac <reload>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
-
                     }
                 }
 
