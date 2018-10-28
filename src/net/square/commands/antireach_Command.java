@@ -1,7 +1,10 @@
 package net.square.commands;
 
 import net.square.api.API;
+import net.square.config.ConfigManager;
 import net.square.main.AntiReach;
+import net.square.utils.TYPE;
+import net.square.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,8 +25,8 @@ public class antireach_Command implements CommandExecutor {
                 } else if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("reload")) {
 
-                        Bukkit.getPluginManager().disablePlugin(AntiReach.instance);
-                        Bukkit.getPluginManager().enablePlugin(AntiReach.instance);
+                        Bukkit.reload();
+                        Utils.instance.consoleMessage("[AntiReach] Server reloaded", TYPE.MESSAGE);
                         p.sendMessage(API.instance.plugin);
 
                     } else if (args[0].equalsIgnoreCase("verbose")) {

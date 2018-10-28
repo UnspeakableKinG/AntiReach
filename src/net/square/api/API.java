@@ -109,7 +109,6 @@ public class API {
         AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
 
-
     public void setInstance() {
         instance = this;
     }
