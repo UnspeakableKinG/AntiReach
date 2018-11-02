@@ -28,7 +28,6 @@ public class AimPattern implements Listener {
                 /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
                 e.setCancelled(true);
-                e.setDamage(0.0);
                 API.instance.pokeAimPattern(p.getName(), "wrong aim in move", ping, tps);
             }
         }
