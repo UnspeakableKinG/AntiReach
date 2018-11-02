@@ -43,6 +43,7 @@ public class API {
     public double MAX_REACH_B = 4.1;
     public double MAX_REACH_C = 4.0;
     public double MAX_REACH_D = 4.2;
+    public double MAX_REACH_E = 3.9;
     public boolean consolelog;
     public boolean ownmessage;
     public boolean resetpitch;
@@ -94,6 +95,8 @@ public class API {
         Bukkit.getPluginManager().registerEvents(new reach_b(), AntiReach.instance);
         Bukkit.getPluginManager().registerEvents(new reach_c(), AntiReach.instance);
         Bukkit.getPluginManager().registerEvents(new reach_d(), AntiReach.instance);
+        Bukkit.getPluginManager().registerEvents(new reach_e(), AntiReach.instance);
+        Bukkit.getPluginManager().registerEvents(new AimPattern(), AntiReach.instance);
     }
 
     public void register() {
@@ -151,7 +154,48 @@ public class API {
                     }
                 }
             }
+        }
+    }
 
+    public void pokeAimPattern(String player, String description, int ping, double tps) {
+
+        if(API.instance.resetpitch) {
+            Location loc = Bukkit.getPlayer(player).getLocation();
+            loc.setPitch(-90F);
+            loc.setYaw(-90F);
+            Bukkit.getPlayer(player).teleport(loc);
+
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    if (consolelog) {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for AimPattern: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                        }
+                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for AimPattern: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                    } else {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for AimPattern: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                        }
+                    }
+                }
+            }
+
+        } else {
+
+            for (Player all : Bukkit.getOnlinePlayers()) {
+                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                    if (consolelog) {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for AimPattern: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                        }
+                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for AimPattern: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                    } else {
+                        if (API.instance.verbosemode.contains(all.getName())) {
+                            all.sendMessage(prefix + " §7" + player + " §7suspected for AimPattern: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                        }
+                    }
+                }
+            }
 
         }
     }
