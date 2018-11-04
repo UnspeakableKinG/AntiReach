@@ -18,5 +18,11 @@ public class QuitListener implements Listener {
         if(antireach_Command.accepted.contains(p.getName())) {
             antireach_Command.accepted.remove(p.getName());
         }
+        if(API.instance.VLHitDirection.containsKey(p.getUniqueId())) {
+            API.VLHitDirection.remove(p.getUniqueId());
+        }
+        if(API.VLReach.containsKey(p.getUniqueId())) {
+            API.VLReach.remove(p.getUniqueId());
+        }
     }
 }

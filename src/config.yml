@@ -44,7 +44,8 @@ Checks:
     enable: true
     maxreach: 3.9
   HitDirection:
-    enable: true
+    #This Check is currently in beta | enable it on your own responsibility
+    enable: false
     hitBoxLenght: 1.05
     normX: 0.5
     normY: 0.5
@@ -63,3 +64,11 @@ Settings:
   console-log: false
   #Set player pitch to -90F on check
   reset-player-pitch: true
+  #Edit the Settings for the Check: HitDirection
+  HitDirection:
+    min-level-to-kick: 30
+    kick-command: "kick %name% %prefix% &7We have detected you with HitDirection"
+  #Edit the Settings for the Check: Reach
+  Reach:
+    min-level-to-kick: 30
+    kick-command: "kick %name% %prefix% &7We have detected you with Reach &8[&e%reach%&8]"

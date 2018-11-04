@@ -28,6 +28,7 @@ public class antireach_Command implements CommandExecutor {
                     p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
                     p.sendMessage(API.instance.prefix + " §8/§cac <checkState>");
                     p.sendMessage(API.instance.prefix + " §8/§cac <resetConfig>");
+                    p.sendMessage(API.instance.prefix + " §8/§cac <clearVL>");
 
                 } else if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("reload")) {
@@ -89,6 +90,11 @@ public class antireach_Command implements CommandExecutor {
                         } else {
                             p.sendMessage(API.instance.prefix+" §7Reach E §f(§cDISABLE§f)");
                         }
+                        if(API.instance.HIT_DIRECTION) {
+                            p.sendMessage(API.instance.prefix+" §7HitDirection A §f(§aENABLE§f)");
+                        } else {
+                            p.sendMessage(API.instance.prefix+" §7HitDirection A §f(§cDISABLE§f)");
+                        }
                         p.sendMessage(API.instance.prefix+" §8§m--------------------");
 
 
@@ -114,11 +120,23 @@ public class antireach_Command implements CommandExecutor {
                         }
 
 
+                    } else if(args[0].equalsIgnoreCase("clearVL")) {
+
+                        try {
+                            API.VLReach.clear();
+                            API.VLHitDirection.clear();
+                        } catch(Exception error) {
+                            error.printStackTrace();
+                        }
+                        p.sendMessage(API.instance.prefix+ "§7 VL Level cleared for §8(§eReach§7, §eHitDirection§8)");
+
+
                     } else {
                         p.sendMessage(API.instance.prefix + " §8/§cac <reload>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <verbose>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <checkState>");
                         p.sendMessage(API.instance.prefix + " §8/§cac <resetConfig>");
+                        p.sendMessage(API.instance.prefix + " §8/§cac <clearVL>");
                     }
                 }
 

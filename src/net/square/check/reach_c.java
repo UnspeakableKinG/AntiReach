@@ -40,17 +40,29 @@ public class reach_c implements Listener {
                             if (event.getEntity().getLocation().distance(player.getLocation()) > API.instance.MAX_REACH_C && player.getLocation().getY() < event.getEntity().getLocation().getY() + 0.1) {
                                 if (player.hasPotionEffect(PotionEffectType.SPEED)) {
                                     if (event.getEntity().getLocation().distance(player.getLocation()) > API.instance.MAX_REACH_C + 1 && player.getLocation().getY() < event.getEntity().getLocation().getY() + 0.1) {
-                                        API.instance.pokeReach(player.getName(), "higher range as max < " + API.instance.MAX_REACH_C + 1, ddistance, ping, tps, ReachType.C);
-                                        event.setCancelled(true);
+                                        if(player != null) {
+                                            API.instance.pokeReach(player.getName(), "higher range as max < " + API.instance.MAX_REACH_C + 1, ddistance, ping, tps, ReachType.C, API.VLReach.get(player.getUniqueId()));
+                                            event.setCancelled(true);
+                                        } else {
+                                            event.setCancelled(false);
+                                        }
                                     }
                                 } else {
-                                    API.instance.pokeReach(player.getName(), "higher range as max < " + API.instance.MAX_REACH_C + 1, ddistance, ping, tps, ReachType.C);
-                                    event.setCancelled(true);
+                                    if(player != null) {
+                                        API.instance.pokeReach(player.getName(), "higher range as max < " + API.instance.MAX_REACH_C + 1, ddistance, ping, tps, ReachType.C, API.VLReach.get(player.getUniqueId()));
+                                        event.setCancelled(true);
+                                    } else {
+                                        event.setCancelled(false);
+                                    }
                                 }
                             }
                             if (event.getEntity().getLocation().distance(player.getLocation()) > API.instance.MAX_REACH_C && player.getLocation().getY() > event.getEntity().getLocation().getY()) {
-                                API.instance.pokeReach(player.getName(), "higher range as max < " + API.instance.MAX_REACH_C, ddistance, ping, tps, ReachType.C);
-                                event.setCancelled(true);
+                                if(player != null) {
+                                    API.instance.pokeReach(player.getName(), "higher range as max < " + API.instance.MAX_REACH_C, ddistance, ping, tps, ReachType.C, API.VLReach.get(player.getUniqueId()));
+                                    event.setCancelled(true);
+                                } else {
+                                    event.setCancelled(false);
+                                }
                             }
                         }
                     }

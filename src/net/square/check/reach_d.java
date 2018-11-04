@@ -42,12 +42,20 @@ public class reach_d implements Listener {
                             if(distance > API.instance.MAX_REACH_D) {
                                 if(player.hasPotionEffect(PotionEffectType.SPEED)) {
                                     if(distance > API.instance.MAX_REACH_D + 1) {
-                                        API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D + 1, ddistance,  ping, tps, ReachType.D);
-                                        event.setCancelled(true);
+                                        if(player != null) {
+                                            API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D + 1, ddistance,  ping, tps, ReachType.D, API.VLReach.get(player.getUniqueId()));
+                                            event.setCancelled(true);
+                                        } else {
+                                            event.setCancelled(false);
+                                        }
                                     }
                                 } else {
-                                    API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D, ddistance,  ping, tps, ReachType.D);
-                                    event.setCancelled(true);
+                                    if(player != null) {
+                                        API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D, ddistance,  ping, tps, ReachType.D, API.VLReach.get(player.getUniqueId()));
+                                        event.setCancelled(true);
+                                    } else {
+                                        event.setCancelled(false);
+                                    }
                                 }
                             }
                         }

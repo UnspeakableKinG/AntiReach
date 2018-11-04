@@ -35,7 +35,7 @@ public class hitdirection_a implements Listener {
                                 double tps = TPSManager.instance.getTPS();
                                 /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
-                                API.instance.pokeHit(player.getName(), "wrong hitdirection (killaura?)", ping, tps);
+                                API.instance.pokeHit(player.getName(), "wrong hitdirection (killaura?)", ping, tps, API.VLHitDirection.get(player.getUniqueId()));
                                 event.setCancelled(true);
 
                             }

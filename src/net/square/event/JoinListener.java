@@ -11,5 +11,11 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
+        if(!API.instance.VLHitDirection.containsKey(p.getUniqueId())) {
+            API.VLHitDirection.put(p.getUniqueId(), 0);
+        }
+        if(!API.VLReach.containsKey(p.getUniqueId())) {
+            API.VLReach.put(p.getUniqueId(), 0);
+        }
     }
 }

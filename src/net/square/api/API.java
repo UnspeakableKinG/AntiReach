@@ -12,9 +12,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
+import org.omg.CORBA.INTERNAL;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class API {
 
@@ -28,6 +31,8 @@ public class API {
 
     public static API instance;
     public ArrayList<String> verbosemode = new ArrayList<>();
+    public static HashMap<UUID, Integer> VLReach = new HashMap<UUID, Integer>();
+    public static HashMap<UUID, Integer> VLHitDirection = new HashMap<UUID, Integer>();
     public String cpr = "§8| §cINFO §8|  ";
     public String Stripline = "┌───────────────────────────────────────";
     public String Stripline2 = "└───────────────────────────────────────";
@@ -38,6 +43,10 @@ public class API {
     public String noperm;
     public String noplayer;
     public String plugin;
+    public String hitdirectioncommand;
+    public String reachcommand;
+    public Integer hitdirectionlevel;
+    public Integer reachlevel;
     public double MAX_REACH_A;
     public double MAX_REACH_B;
     public double MAX_REACH_C;
@@ -89,6 +98,10 @@ public class API {
         hitBoxLenght = ConfigManager.instance.fileconfigfile.getDouble("Checks.HitDirection.hitBoxLenght");
         normX = ConfigManager.instance.fileconfigfile.getDouble("Checks.HitDirection.normX");
         normY = ConfigManager.instance.fileconfigfile.getDouble("Checks.HitDirection.normY");
+        reachlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick");
+        hitdirectionlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.HitDirection.min-level-to-kick");
+        reachcommand = ConfigManager.instance.fileconfigfile.getString("Settings.Reach.kick-command");
+        hitdirectioncommand = ConfigManager.instance.fileconfigfile.getString("Settings.HitDirection.kick-command");
     }
 
     public void onStart() {
@@ -103,12 +116,14 @@ public class API {
     public void startSession() {
         // start session method
         this.loadValues();
+        this.setDefault();
         Utils.instance.consoleMessage("├ INFO | » §7Values loaded", TYPE.MESSAGE);
         this.register();
         Utils.instance.consoleMessage("├ INFO | » §7Commands registred", TYPE.MESSAGE);
         this.registerChecks();
         Utils.instance.consoleMessage("├ INFO | » §7Checks registred", TYPE.MESSAGE);
         Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
+        startTask();
     }
 
     public void registerChecks() {
@@ -163,84 +178,151 @@ public class API {
         AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
 
+    private void startTask() {
+        Bukkit.getScheduler().runTaskTimer(AntiReach.instance, new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    API.VLHitDirection.clear();
+                    API.VLReach.clear();
+                    for(Player all : Bukkit.getOnlinePlayers()) {
+                        if(all.hasPermission(admin)) {
+                            all.sendMessage(prefix+" §7VL level has ben resettet");
+                        }
+                    }
+                } catch (Exception error) {
+                    error.printStackTrace();
+                }
+            }
+        }, 0, 1200);
+    }
+
+    public void setDefault() {
+        for(Player all : Bukkit.getOnlinePlayers()) {
+            if(!API.VLReach.containsKey(all.getUniqueId())) {
+                API.VLReach.put(all.getUniqueId(), 0);
+            }
+            if(!API.VLHitDirection.containsKey(all.getUniqueId())) {
+                API.VLHitDirection.put(all.getUniqueId(), 0);
+            }
+        }
+    }
+
     public void setInstance() {
         instance = this;
     }
 
-    public void pokeReach(String player, String description, String distance, int ping, double tps, ReachType type) {
+    public void pokeReach(String player, String description, String distance, int ping, double tps, ReachType type, Integer VL) {
+        if (Bukkit.getPlayer(player) != null) {
+            if (API.VLReach.containsKey(Bukkit.getPlayer(player).getUniqueId())) {
+                if (API.VLReach.get(Bukkit.getPlayer(player).getUniqueId()) == ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick")) {
 
-        if (API.instance.resetpitch) {
-            Location loc = Bukkit.getPlayer(player).getLocation();
-            loc.setPitch(-90F);
-            loc.setYaw(-90F);
-            Bukkit.getPlayer(player).teleport(loc);
-
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
-                    if (consolelog) {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
-                        }
-                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
-                    } else {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                    VLReach.remove(Bukkit.getPlayer(player).getUniqueId());
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance));
+                    for (Player all : Bukkit.getOnlinePlayers()) {
+                        if (all.hasPermission(admin)) {
+                            all.sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
                         }
                     }
-                }
-            }
+                    Bukkit.getConsoleSender().sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
 
-        } else {
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
-                    if (consolelog) {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+
+                } else {
+
+                    API.VLReach.put(Bukkit.getPlayer(player).getUniqueId(), VLReach.get(Bukkit.getPlayer(player).getUniqueId()) + 1);
+
+                    if (API.instance.resetpitch) {
+                        Location loc = Bukkit.getPlayer(player).getLocation();
+                        loc.setPitch(-90F);
+                        loc.setYaw(-90F);
+                        Bukkit.getPlayer(player).teleport(loc);
+
+                        for (Player all : Bukkit.getOnlinePlayers()) {
+                            if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                                if (consolelog) {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                    }
+                                    Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                } else {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                    }
+                                }
+                            }
                         }
-                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+
                     } else {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + "]");
+                        for (Player all : Bukkit.getOnlinePlayers()) {
+                            if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                                if (consolelog) {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                    }
+                                    Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                } else {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
-    public void pokeHit (String player, String description, int ping, double tps) {
-
-
-        if (API.instance.resetpitch) {
-            Location loc = Bukkit.getPlayer(player).getLocation();
-            loc.setPitch(-90F);
-            loc.setYaw(-90F);
-            Bukkit.getPlayer(player).teleport(loc);
-
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
-                    if (consolelog) {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
-                        }
-                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
-                    } else {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+    public void pokeHit (String player, String description, int ping, double tps, Integer VL) {
+        if (Bukkit.getPlayer(player) != null) {
+            if (API.VLHitDirection.containsKey(Bukkit.getPlayer(player).getUniqueId())) {
+                if (API.VLHitDirection.get(Bukkit.getPlayer(player).getUniqueId()) == ConfigManager.instance.fileconfigfile.getInt("Settings.HitDirection.min-level-to-kick")) {
+                    VLHitDirection.remove(Bukkit.getPlayer(player).getUniqueId());
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), hitdirectioncommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§"));
+                    for (Player all : Bukkit.getOnlinePlayers()) {
+                        if (all.hasPermission(admin)) {
+                            all.sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for HitDirection");
                         }
                     }
-                }
-            }
-        } else {
-            for (Player all : Bukkit.getOnlinePlayers()) {
-                if (all.hasPermission(admin) || all.hasPermission(verbose)) {
-                    if (consolelog) {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                    Bukkit.getConsoleSender().sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for HitDirection");
+
+                } else {
+
+                    API.VLHitDirection.put(Bukkit.getPlayer(player).getUniqueId(), VLHitDirection.get(Bukkit.getPlayer(player).getUniqueId()) + 1);
+
+                    if (API.instance.resetpitch) {
+                        Location loc = Bukkit.getPlayer(player).getLocation();
+                        loc.setPitch(-90F);
+                        loc.setYaw(-90F);
+                        Bukkit.getPlayer(player).teleport(loc);
+
+                        for (Player all : Bukkit.getOnlinePlayers()) {
+                            if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                                if (consolelog) {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + " VL: " + VL + "]");
+                                    }
+                                    Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + " VL: " + VL + "]");
+                                } else {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + " VL: " + VL + "]");
+                                    }
+                                }
+                            }
                         }
-                        Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
                     } else {
-                        if (API.instance.verbosemode.contains(all.getName())) {
-                            all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + "]");
+                        for (Player all : Bukkit.getOnlinePlayers()) {
+                            if (all.hasPermission(admin) || all.hasPermission(verbose)) {
+                                if (consolelog) {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + " VL: " + VL + "]");
+                                    }
+                                    Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + " VL: " + VL + "]");
+                                } else {
+                                    if (API.instance.verbosemode.contains(all.getName())) {
+                                        all.sendMessage(prefix + " §7" + player + " §7suspected for HitDirection: " + description + " [Ping:" + ping + " TPS:" + tps + " VL: " + VL + "]");
+                                    }
+                                }
+                            }
                         }
                     }
                 }

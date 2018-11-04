@@ -13,4 +13,11 @@ public class AntiReachAPI {
     public void setInstance() {
         instance = this;
     }
+
+    public void clearReachVL() {
+        API.VLReach.clear();
+    }
+    public void clearHitDirectionVL() {
+        API.VLHitDirection.clear();
+    }
 }
