@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffectType;
 
 public class reach_a implements Listener {
 
@@ -42,9 +43,15 @@ public class reach_a implements Listener {
                             /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
                             if (distance > API.instance.MAX_REACH_A) {
-                                API.instance.pokeReach(player.getName(), "too high hit range < "+API.instance.MAX_REACH_A, ddistance, ping, tps, ReachType.A);
+                                if(player.hasPotionEffect(PotionEffectType.SPEED)) {
+                                    if(distance > API.instance.MAX_REACH_A + 1.0) {
+                                        API.instance.pokeReach(player.getName(), "too high hit range < "+API.instance.MAX_REACH_A +1.0, ddistance, ping, tps, ReachType.A);
+                                        event.setCancelled(true);
+                                    }
+                                } else {
+                                    API.instance.pokeReach(player.getName(), "too high hit range < "+API.instance.MAX_REACH_A, ddistance, ping, tps, ReachType.A);
                                     event.setCancelled(true);
-
+                                }
                             }
                         }
                     }

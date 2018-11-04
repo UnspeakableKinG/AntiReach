@@ -1,7 +1,9 @@
 package net.square.config;
 
 import net.square.main.AntiReach;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
 
 public class ConfigManager {
 
@@ -12,11 +14,15 @@ public class ConfigManager {
     }
 
     private AntiReach plugin = AntiReach.instance;
-
-    public FileConfiguration fileconfig = null;
+    public File fileconfig;
+    public YamlConfiguration fileconfigfile;
 
     public void createConfig() {
-        plugin.saveDefaultConfig();
-        fileconfig = plugin.getConfig();
+        File file = new File("plugins/AntiReach/config.yml");
+        if (!file.exists()) {
+            plugin.saveDefaultConfig();
+        }
+        fileconfig = file;
+        fileconfigfile = YamlConfiguration.loadConfiguration(file);
     }
 }

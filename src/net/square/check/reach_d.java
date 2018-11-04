@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffectType;
 
 /**
  * Copyright © SquareCode 2018
@@ -39,8 +40,15 @@ public class reach_d implements Listener {
                             /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
                             if(distance > API.instance.MAX_REACH_D) {
-                                API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D, ddistance,  ping, tps, ReachType.D);
+                                if(player.hasPotionEffect(PotionEffectType.SPEED)) {
+                                    if(distance > API.instance.MAX_REACH_D + 1) {
+                                        API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D + 1, ddistance,  ping, tps, ReachType.D);
+                                        event.setCancelled(true);
+                                    }
+                                } else {
+                                    API.instance.pokeReach(player.getName(), "over max reach < "+API.instance.MAX_REACH_D, ddistance,  ping, tps, ReachType.D);
                                     event.setCancelled(true);
+                                }
                             }
                         }
                     }

@@ -10,7 +10,9 @@
 #>> is replaceable to »
 #<<  is replaceable to «
 #<st> is replaceable to ×
-Prefix: "&4<pk>&c<p> &cAntiReach &8<s>"
+#<d> is replaceable to ►
+#<sb> is replaceable to ▎
+Prefix: "&8<sb> &9AntiReach &8<d>"
 
 General:
   #Here are the important news.
@@ -19,17 +21,33 @@ General:
   NoPermissions: "%prefix% &cYou dont have permissions to do that."
   #Message comes when the console / ac does.
   NoPlayer: "%prefix% &cYou must be a player to execute this command."
-  #Message comes when a player is kicked for increased range.
-  #In addition, there is the %reach% as a variable for the range.
-  #%name% for the player name so far he is online
-  kick-command: "kick %name% %prefix% &cWe have detected you with reach! &8[&c%reach%&8]"
-  #When a player reaches this level, he is automatically kicked.
-  level-to-kick: 10
 
 Messages:
   #Standard messages can be changed here.
   #Color codes are indicated with & and are thus translated
   Plugin: "%prefix% &7Plugin was sucessfully reloaded"
+
+Checks:
+  A:
+    enable: true
+    maxreach: 4.3
+  B:
+    enable: true
+    maxreach: 4.1
+  C:
+    enable: true
+    maxreach: 4.0
+  D:
+    enable: true
+    maxreach: 4.2
+  E:
+    enable: true
+    maxreach: 3.9
+  HitDirection:
+    enable: true
+    hitBoxLenght: 1.05
+    normX: 0.5
+    normY: 0.5
 
 Permissions:
   #Not covered by this system.
