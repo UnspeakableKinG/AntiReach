@@ -2,6 +2,7 @@ package net.square.main;
 
 import net.square.api.API;
 import net.square.api.AntiReachAPI;
+import net.square.api.Metrics;
 import net.square.config.ConfigManager;
 import net.square.utils.MathUtil;
 import net.square.utils.TPSManager;
@@ -27,6 +28,7 @@ public class AntiReach extends JavaPlugin {
         new AntiReachAPI().setInstance();
         new MathUtil().setInstance();
         new TPSManager().setInstance();
+        new Metrics(this);
 
         try {
             API.instance.onStart();
