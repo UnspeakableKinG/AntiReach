@@ -1,5 +1,6 @@
 package net.square.utils;
 
+import net.square.api.API;
 import org.bukkit.Bukkit;
 
 public class Utils {
@@ -17,7 +18,7 @@ public class Utils {
         } else if (type.equals(TYPE.ERROR)) {
             Bukkit.getConsoleSender().sendMessage("§cAn error has occured: " + message);
         } else if (type.equals(TYPE.EMPTY)) {
-            Bukkit.getConsoleSender().sendMessage("");
+            Bukkit.getConsoleSender().sendMessage(API.instance.cpr+"");
         }
     }
 }

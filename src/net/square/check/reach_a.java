@@ -1,21 +1,25 @@
 package net.square.check;
 
 import net.square.api.API;
+import net.square.api.HackType;
+import net.square.api.Module;
 import net.square.utils.MathUtil;
 import net.square.utils.TPSManager;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 
-public class reach_a implements Listener {
+public class reach_a extends Module {
+
+    public reach_a() {
+        super("Reach", "EntityDamageByEntityEvent", HackType.COMBAT, "A");
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onHit(EntityDamageByEntityEvent event) {
@@ -23,7 +27,6 @@ public class reach_a implements Listener {
         /*--------------------------------------------------------------*/
 
         if (event.getDamager() instanceof Player) {
-            if (event.getEntityType().isAlive()) {
                 if (event.getEntity().getType() == EntityType.PLAYER) {
                     Player player = (Player) event.getDamager();
                     Player target = (Player) event.getEntity();
@@ -62,7 +65,7 @@ public class reach_a implements Listener {
                                 }
                             }
                         }
-                    }
+
                 } else {
                     event.setCancelled(false);
                 }

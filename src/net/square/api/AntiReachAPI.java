@@ -17,7 +17,4 @@ public class AntiReachAPI {
     public void clearReachVL() {
         API.VLReach.clear();
     }
-    public void clearHitDirectionVL() {
-        API.VLHitDirection.clear();
-    }
 }

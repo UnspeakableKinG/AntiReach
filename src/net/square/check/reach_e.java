@@ -1,6 +1,8 @@
 package net.square.check;
 
 import net.square.api.API;
+import net.square.api.HackType;
+import net.square.api.Module;
 import net.square.utils.MathUtil;
 import net.square.utils.TPSManager;
 import org.bukkit.GameMode;
@@ -18,7 +20,11 @@ import org.bukkit.potion.PotionEffectType;
  * created on: 02.11.2018 / 18:23
  * Project: AntiReach
  */
-public class reach_e implements Listener {
+public class reach_e extends Module {
+
+    public reach_e() {
+        super("Reach", "EntityDamageByEntityEvent", HackType.COMBAT, "E");
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onHit(EntityDamageByEntityEvent event) {
@@ -26,88 +32,86 @@ public class reach_e implements Listener {
         /*--------------------------------------------------------------*/
 
         if (event.getDamager() instanceof Player) {
-            if (event.getEntityType().isAlive()) {
-                if (event.getEntity().getType() == EntityType.PLAYER) {
-                    Player player = (Player) event.getDamager();
-                    if (player.getGameMode() != GameMode.CREATIVE) {
-                        if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
+            if (event.getEntity().getType() == EntityType.PLAYER) {
+                Player player = (Player) event.getDamager();
+                if (player.getGameMode() != GameMode.CREATIVE) {
+                    if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
 
-                            double distance = MathUtil.instance.getDistance3D(player.getLocation(), event.getEntity().getLocation());
+                        double distance = MathUtil.instance.getDistance3D(player.getLocation(), event.getEntity().getLocation());
 
-                            /*-------------------------------[ ADDITIVE ]-------------------------------*/
-                            int ping = ((CraftPlayer) player).getHandle().ping;
-                            double tps = TPSManager.instance.getTPS();
-                            String ddistance = Double.toString(distance).substring(0, 3);
-                            /*-------------------------------[ ADDITIVE ]-------------------------------*/
+                        /*-------------------------------[ ADDITIVE ]-------------------------------*/
+                        int ping = ((CraftPlayer) player).getHandle().ping;
+                        double tps = TPSManager.instance.getTPS();
+                        String ddistance = Double.toString(distance).substring(0, 3);
+                        /*-------------------------------[ ADDITIVE ]-------------------------------*/
 
-                            double dist = event.getEntity().getLocation().distance(player.getLocation());
+                        double dist = event.getEntity().getLocation().distance(player.getLocation());
 
-                            if (dist > API.instance.MAX_REACH_E && event.getEntity().getLocation().getBlockY() == player.getLocation().getBlockY()) {
-                                if(player != null) {
-                                    event.setCancelled(true);
+                        if (dist > API.instance.MAX_REACH_E && event.getEntity().getLocation().getBlockY() == player.getLocation().getBlockY()) {
+                            if (player != null) {
+                                event.setCancelled(true);
+                                API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
+                            } else {
+                                event.setCancelled(false);
+                            }
+                        } else if ((dist > API.instance.MAX_REACH_E + 0.3
+                                || dist > API.instance.MAX_REACH_E + 0.4
+                                || dist > API.instance.MAX_REACH_E + 0.5
+                                || dist > API.instance.MAX_REACH_E + 0.6
+                                || dist > API.instance.MAX_REACH_E + 0.7
+                                || dist > API.instance.MAX_REACH_E + 0.8
+                                || dist > API.instance.MAX_REACH_E + 0.9
+                                || dist > API.instance.MAX_REACH_E + 1.0
+                                || dist > API.instance.MAX_REACH_E + 1.1
+                                || dist > API.instance.MAX_REACH_E + 1.2
+                                || dist > API.instance.MAX_REACH_E + 1.3)
+                                && event.getEntity().getLocation().getBlockY() > player.getLocation().getBlockY()) {
+                            if (player.hasPotionEffect(PotionEffectType.SPEED)) {
+                                if ((dist > API.instance.MAX_REACH_E + 1 + 0.3
+                                        || dist > API.instance.MAX_REACH_E + 1 + 0.4
+                                        || dist > API.instance.MAX_REACH_E + 1 + 0.5
+                                        || dist > API.instance.MAX_REACH_E + 1 + 0.6
+                                        || dist > API.instance.MAX_REACH_E + 1 + 0.7
+                                        || dist > API.instance.MAX_REACH_E + 1 + 0.8
+                                        || dist > API.instance.MAX_REACH_E + 1 + 0.9
+                                        || dist > API.instance.MAX_REACH_E + 1 + 1.0
+                                        || dist > API.instance.MAX_REACH_E + 1 + 1.1
+                                        || dist > API.instance.MAX_REACH_E + 1 + 1.2
+                                        || dist > API.instance.MAX_REACH_E + 1 + 1.3)
+                                        && event.getEntity().getLocation().getBlockY() > player.getLocation().getBlockY()) {
+                                    if (player != null) {
+                                        API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E + 1, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
+                                        event.setCancelled(true);
+                                    } else {
+                                        event.setCancelled(false);
+                                    }
+                                }
+                            } else {
+                                if (player != null) {
                                     API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
+                                    event.setCancelled(true);
                                 } else {
                                     event.setCancelled(false);
                                 }
-                            } else if ((dist > API.instance.MAX_REACH_E + 0.3
-                                    || dist > API.instance.MAX_REACH_E + 0.4
-                                    || dist > API.instance.MAX_REACH_E + 0.5
-                                    || dist > API.instance.MAX_REACH_E + 0.6
-                                    || dist > API.instance.MAX_REACH_E + 0.7
-                                    || dist > API.instance.MAX_REACH_E + 0.8
-                                    || dist > API.instance.MAX_REACH_E + 0.9
-                                    || dist > API.instance.MAX_REACH_E + 1.0
-                                    || dist > API.instance.MAX_REACH_E + 1.1
-                                    || dist > API.instance.MAX_REACH_E + 1.2
-                                    || dist > API.instance.MAX_REACH_E + 1.3)
-                                    && event.getEntity().getLocation().getBlockY() > player.getLocation().getBlockY()) {
-                                if (player.hasPotionEffect(PotionEffectType.SPEED)) {
-                                    if ((dist > API.instance.MAX_REACH_E + 1 + 0.3
-                                            || dist > API.instance.MAX_REACH_E + 1 + 0.4
-                                            || dist > API.instance.MAX_REACH_E + 1 + 0.5
-                                            || dist > API.instance.MAX_REACH_E + 1 + 0.6
-                                            || dist > API.instance.MAX_REACH_E + 1 + 0.7
-                                            || dist > API.instance.MAX_REACH_E + 1 + 0.8
-                                            || dist > API.instance.MAX_REACH_E + 1 + 0.9
-                                            || dist > API.instance.MAX_REACH_E + 1 + 1.0
-                                            || dist > API.instance.MAX_REACH_E + 1 + 1.1
-                                            || dist > API.instance.MAX_REACH_E + 1 + 1.2
-                                            || dist > API.instance.MAX_REACH_E + 1 + 1.3)
-                                            && event.getEntity().getLocation().getBlockY() > player.getLocation().getBlockY()) {
-                                        if(player != null) {
-                                            API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E + 1, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
-                                            event.setCancelled(true);
-                                        } else {
-                                            event.setCancelled(false);
-                                        }
-                                    }
-                                } else {
-                                    if(player != null) {
-                                        API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
+
+                            }
+
+                        } else if (dist > API.instance.MAX_REACH_E + 0.2 && event.getEntity().getLocation().getBlockY() < player.getLocation().getBlockY()) {
+                            if (player.hasPotionEffect(PotionEffectType.SPEED)) {
+                                if (dist > API.instance.MAX_REACH_E + 1 + 0.2 && event.getEntity().getLocation().getBlockY() < player.getLocation().getBlockY()) {
+                                    if (player != null) {
+                                        API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E + 1, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
                                         event.setCancelled(true);
                                     } else {
                                         event.setCancelled(false);
                                     }
-
                                 }
-
-                            } else if (dist > API.instance.MAX_REACH_E + 0.2 && event.getEntity().getLocation().getBlockY() < player.getLocation().getBlockY()) {
-                                if(player.hasPotionEffect(PotionEffectType.SPEED)) {
-                                    if (dist > API.instance.MAX_REACH_E + 1 + 0.2 && event.getEntity().getLocation().getBlockY() < player.getLocation().getBlockY()) {
-                                        if(player != null) {
-                                            API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E + 1, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
-                                            event.setCancelled(true);
-                                        } else {
-                                            event.setCancelled(false);
-                                        }
-                                    }
+                            } else {
+                                if (player != null) {
+                                    API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
+                                    event.setCancelled(true);
                                 } else {
-                                    if(player != null) {
-                                        API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_E, ddistance, ping, tps, ReachType.E, API.VLReach.get(player.getUniqueId()));
-                                        event.setCancelled(true);
-                                    } else {
-                                        event.setCancelled(false);
-                                    }
+                                    event.setCancelled(false);
                                 }
                             }
                         }

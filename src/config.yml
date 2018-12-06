@@ -12,7 +12,7 @@
 #<st> is replaceable to ×
 #<d> is replaceable to ►
 #<sb> is replaceable to ▎
-Prefix: "&8<sb> &9AntiReach &8<d>"
+Prefix: "&8<sb> &cAntiReach &8<d>"
 
 General:
   #Here are the important news.
@@ -26,29 +26,6 @@ Messages:
   #Standard messages can be changed here.
   #Color codes are indicated with & and are thus translated
   Plugin: "%prefix% &7Plugin was sucessfully reloaded"
-
-Checks:
-  A:
-    enable: true
-    maxreach: 4.3
-  B:
-    enable: true
-    maxreach: 4.1
-  C:
-    enable: true
-    maxreach: 4.0
-  D:
-    enable: true
-    maxreach: 4.2
-  E:
-    enable: true
-    maxreach: 3.9
-  HitDirection:
-    #This Check is currently in beta | enable it on your own responsibility
-    enable: false
-    hitBoxLenght: 1.05
-    normX: 0.5
-    normY: 0.5
 
 Permissions:
   #Not covered by this system.
@@ -64,10 +41,6 @@ Settings:
   console-log: false
   #Set player pitch to -90F on check
   reset-player-pitch: true
-  #Edit the Settings for the Check: HitDirection
-  HitDirection:
-    min-level-to-kick: 30
-    kick-command: "kick %name% %prefix% &7We have detected you with HitDirection"
   #Edit the Settings for the Check: Reach
   Reach:
     min-level-to-kick: 30
