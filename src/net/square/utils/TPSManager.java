@@ -1,5 +1,9 @@
 package net.square.utils;
 
+import net.square.main.AntiReach;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 /**
  * Copyright © SquareCode 2018
  * created on: 23.10.2018 / 20:14
@@ -13,20 +17,30 @@ public class TPSManager {
         instance = this;
     }
 
-    public static int TICK_COUNT = 0;
-    public static long[] TICKS = new long[600];
+    public static double tps;
 
-    public double getTPS() {
-        return getTPS(100);
+    public static void startTPSChecking() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin) AntiReach.instance, (Runnable)new Runnable() {
+            long seconds;
+            long latestSeconds;
+            int i;
+
+            @Override
+            public void run() {
+                this.seconds = System.currentTimeMillis() / 1000L;
+                if (this.latestSeconds == this.seconds) {
+                    ++this.i;
+                }
+                else {
+                    this.latestSeconds = this.seconds;
+                    TPSManager.tps = ((TPSManager.tps == 0.0) ? this.i : ((TPSManager.tps + this.i) / 2.0));
+                    this.i = 0;
+                }
+            }
+        }, 1L, 1L);
     }
 
-    public double getTPS(int ticks) {
-        if (TICK_COUNT < ticks) {
-            return 20.0D;
-        }
-        int target = (TICK_COUNT - 1 - ticks) % TICKS.length;
-        long elapsed = System.currentTimeMillis() - TICKS[target];
-
-        return ticks / (elapsed / 1000.0D);
+    public static double getTPS() {
+        return (TPSManager.tps + 1.0 > 20.0) ? 20.0 : (TPSManager.tps + 1.0);
     }
 }

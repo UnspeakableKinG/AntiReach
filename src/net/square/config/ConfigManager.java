@@ -19,6 +19,8 @@ public class ConfigManager {
     public YamlConfiguration fileconfigfile;
     public File valuesfile;
     public YamlConfiguration valuesfileconf;
+    public File langfile;
+    public YamlConfiguration langfileconf;
 
     public void createConfig() {
         File file = new File("plugins/AntiReach/config.yml");
@@ -40,6 +42,30 @@ public class ConfigManager {
         this.valuesfileconf = YamlConfiguration.loadConfiguration(file);
     }
 
+    public void loadlanguageFile() {
+        final File file = new File("plugins/AntiReach/language.yml");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            }
+            catch (IOException ex) {}
+        }
+        this.langfile = file;
+        this.langfileconf = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public void setDefaultLanguages() {
+        this.langfileconf.addDefault("Language.info", "You can change the language to: DE, EN");
+        this.langfileconf.addDefault("Language.lang", "EN");
+        this.langfileconf.options().copyDefaults(true);
+        try {
+            this.langfileconf.save(this.langfile);
+        }
+        catch (IOException error) {
+            error.printStackTrace();
+        }
+    }
+
     public void setDefaultValues() {
         this.valuesfileconf.addDefault("Checks.A.enable", true);
         this.valuesfileconf.addDefault("Checks.A.maxreach", 4.3);
@@ -51,6 +77,8 @@ public class ConfigManager {
         this.valuesfileconf.addDefault("Checks.D.maxreach", 4.3);
         this.valuesfileconf.addDefault("Checks.E.enable", true);
         this.valuesfileconf.addDefault("Checks.E.maxreach", 4.3);
+        this.valuesfileconf.addDefault("Checks.F.enable", true);
+        this.valuesfileconf.addDefault("Checks.F.maxinteract", 5.4);
         this.valuesfileconf.options().copyDefaults(true);
         try {
             this.valuesfileconf.save(this.valuesfile);

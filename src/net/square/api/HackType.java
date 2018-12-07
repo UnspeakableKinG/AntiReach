@@ -7,7 +7,5 @@ package net.square.api;
  */
 public enum HackType
 {
-    COMBAT,
-    MOVEMENT,
-    PLAYER;
+    COMBAT, INTERACT
 }

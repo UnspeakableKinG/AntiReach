@@ -12,7 +12,10 @@ public class AntiReach extends JavaPlugin {
 
     public static AntiReach instance;
 
+    public static long current;
+
     public void onEnable() {
+        current = System.currentTimeMillis();
 
         /**
          * The main class in the system. However, it only serves to load the API start method in the onEnable.

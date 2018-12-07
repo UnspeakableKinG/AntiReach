@@ -19,13 +19,6 @@ General:
   #Message come when someone makes / ac and has no rights.
   own-permissions-message: false
   NoPermissions: "%prefix% &cYou dont have permissions to do that."
-  #Message comes when the console / ac does.
-  NoPlayer: "%prefix% &cYou must be a player to execute this command."
-
-Messages:
-  #Standard messages can be changed here.
-  #Color codes are indicated with & and are thus translated
-  Plugin: "%prefix% &7Plugin was sucessfully reloaded"
 
 Permissions:
   #Not covered by this system.
