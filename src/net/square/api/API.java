@@ -6,12 +6,10 @@ import net.square.config.ConfigManager;
 import net.square.event.JoinListener;
 import net.square.event.QuitListener;
 import net.square.main.AntiReach;
-import net.square.utils.IDGen;
-import net.square.utils.TPSManager;
-import net.square.utils.TYPE;
-import net.square.utils.Utils;
+import net.square.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.omg.CORBA.INTERNAL;
@@ -63,6 +61,8 @@ public class API {
     public boolean REACH_D;
     public boolean REACH_E;
     public boolean REACH_F;
+    public boolean logFile;
+    public boolean OWN_KICK_COMMAND;
     /*-------------------------------------------------------------------------------------------------------*/
 
     public void loadValues() {
@@ -93,6 +93,8 @@ public class API {
         REACH_D = ConfigManager.instance.valuesfileconf.getBoolean("Checks.D.enable");
         REACH_E = ConfigManager.instance.valuesfileconf.getBoolean("Checks.E.enable");
         REACH_F = ConfigManager.instance.valuesfileconf.getBoolean("Checks.F.enable");
+        logFile = ConfigManager.instance.fileconfigfile.getBoolean("Settings.logFile");
+        OWN_KICK_COMMAND = ConfigManager.instance.fileconfigfile.getBoolean("Settings.Reach.own-kick-command");
         reachlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick");
         reachcommand = ConfigManager.instance.fileconfigfile.getString("Settings.Reach.kick-command");
     }
@@ -113,7 +115,7 @@ public class API {
     }
 
     public void starts() {
-        if(ConfigManager.instance.langfileconf.get("Language.lang").equals("DE") || ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+        if (ConfigManager.instance.langfileconf.get("Language.lang").equals("DE") || ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
 
             this.loadValues();
             this.setDefault();
@@ -133,10 +135,11 @@ public class API {
 
         } else {
 
-            Utils.instance.consoleMessage("§cPlugin cant load! Uknown Language§8: §c"+ConfigManager.instance.langfileconf.get("Language.lang"), TYPE.ERROR);
+            Utils.instance.consoleMessage("§cPlugin cant load! Uknown Language§8: §c" + ConfigManager.instance.langfileconf.get("Language.lang"), TYPE.ERROR);
             try {
                 TimeUnit.SECONDS.sleep(5);
-            } catch(InterruptedException error) {}
+            } catch (InterruptedException error) {
+            }
             Bukkit.shutdown();
         }
     }
@@ -191,6 +194,29 @@ public class API {
         AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
 
+    public void kickPlayer(String player, String reason, String distance) {
+        Player p = Bukkit.getPlayer(player);
+        int ping = ((CraftPlayer) Bukkit.getPlayer(player)).getHandle().ping;
+        double tps =  TPSManager.getTPS();
+
+        try {
+            p.kickPlayer(
+                    prefix + " §7Connection refused by server\n" +
+                            "§8§m---------------------------------------\n" +
+                            "\n" +
+                            "§7Reason §8➜ §c" + reason + "\n" +
+                            "§7Ping §8➜ §c" + ping + "\n" +
+                            "§7Reason §8➜ §c" + String.valueOf(tps).substring(0, 4)+ "\n" +
+                            "§7Distance §8➜ §c" + distance+ "\n" +
+                            "\n" +
+                            "§8§m---------------------------------------\n" +
+                            "§cAntiReach §8(§c"+AntiReach.instance.getDescription().getVersion()+"§8) §7by SquareCode");
+        } catch (Exception error) {
+            Utils.instance.consoleMessage("§cCant kick player!", TYPE.ERROR);
+            error.printStackTrace();
+        }
+    }
+
     private void startTask() {
         Bukkit.getScheduler().runTaskTimer(AntiReach.instance, new Runnable() {
             @Override
@@ -200,7 +226,7 @@ public class API {
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         if (all.hasPermission(admin)) {
                             if (API.instance.verbosemode.contains(all.getName())) {
-                                if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                                if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
                                     all.sendMessage(prefix + " §7VL level has ben resettet");
                                 } else {
                                     all.sendMessage(prefix + " §7Das VL-Level wurde zurückgesetzt");
@@ -237,18 +263,27 @@ public class API {
         if (Bukkit.getPlayer(player) != null) {
             if (API.VLReach.containsKey(Bukkit.getPlayer(player).getUniqueId())) {
                 if (API.VLReach.get(Bukkit.getPlayer(player).getUniqueId()) == ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick")) {
+                    if (logFile) {
+                        StorageUtils.log(Bukkit.getPlayer(player), API.getCurrentDate() + " / " + API.getCurrentTime() + " | " + Bukkit.getPlayer(player).getName() + " was kicked for Reach. His last reach was " + distance + " on ping " + ping + " and tps " + tps);
+                    }
                     VLReach.remove(Bukkit.getPlayer(player).getUniqueId());
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance));
+                    if(OWN_KICK_COMMAND) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance));
+                    } else {
+                        kickPlayer(player, "Reach", distance);
+                    }
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         if (all.hasPermission(admin)) {
-                            if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
-                                all.sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
-                            } else {
-                                all.sendMessage(prefix + "§a [KONSOLE] §e" + player + "§7 wurde für Reach gekickt");
+                            if (API.instance.verbose.contains(all.getName())) {
+                                if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                                    all.sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
+                                } else {
+                                    all.sendMessage(prefix + "§a [KONSOLE] §e" + player + "§7 wurde für Reach gekickt");
+                                }
                             }
                         }
                     }
-                    if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                    if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
                         Bukkit.getConsoleSender().sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
                     } else {
                         Bukkit.getConsoleSender().sendMessage(prefix + "§a [KONSOLE] §e" + player + "§7 wurde für Reach gekickt");

@@ -34,7 +34,10 @@ Settings:
   console-log: false
   #Set player pitch to -90F on check
   reset-player-pitch: true
+  #Create a log file from a player when he get kicked
+  logFile: true
   #Edit the Settings for the Check: Reach
   Reach:
     min-level-to-kick: 30
+    own-kick-command: false
     kick-command: "kick %name% %prefix% &7We have detected you with Reach &8[&e%reach%&8]"
