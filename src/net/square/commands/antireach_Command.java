@@ -12,21 +12,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import static net.square.utils.TPSManager.tps;
 
 public class antireach_Command implements CommandExecutor {
 
     public static ArrayList<String> accepted = new ArrayList<>();
-    static InetAddress ip;
-    static NetworkInterface network;
-    static String macc;
-
-    static long maxMemory = Runtime.getRuntime().maxMemory();
 
     static double tps = TPSManager.getTPS();
     static double tpps = Math.round((1.0D - tps / 20.0D) * 100.0D);
