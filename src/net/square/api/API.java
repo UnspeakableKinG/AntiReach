@@ -200,17 +200,31 @@ public class API {
         double tps =  TPSManager.getTPS();
 
         try {
-            p.kickPlayer(
-                    prefix + " §7Connection refused by server\n" +
-                            "§8§m---------------------------------------\n" +
-                            "\n" +
-                            "§7Reason §8➜ §c" + reason + "\n" +
-                            "§7Ping §8➜ §c" + ping + "\n" +
-                            "§7Reason §8➜ §c" + String.valueOf(tps).substring(0, 4)+ "\n" +
-                            "§7Distance §8➜ §c" + distance+ "\n" +
-                            "\n" +
-                            "§8§m---------------------------------------\n" +
-                            "§cAntiReach §8(§c"+AntiReach.instance.getDescription().getVersion()+"§8) §7by SquareCode");
+            if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                p.kickPlayer(
+                        prefix + " §7Connection refused by server\n" +
+                                "§8§m---------------------------------------\n" +
+                                "\n" +
+                                "§7Reason §8➜ §c" + reason + "\n" +
+                                "§7Ping §8➜ §c" + ping + "\n" +
+                                "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4)+ "\n" +
+                                "§7Distance §8➜ §c" + distance+ "\n" +
+                                "\n" +
+                                "§8§m---------------------------------------\n" +
+                                "§cAntiReach §8(§c"+AntiReach.instance.getDescription().getVersion()+"§8) §7by SquareCode");
+            } else {
+                p.kickPlayer(
+                        prefix + " §7Verbindung zum Server unterbrochen\n" +
+                                "§8§m---------------------------------------\n" +
+                                "\n" +
+                                "§7Grund §8➜ §c" + reason + "\n" +
+                                "§7Ping §8➜ §c" + ping + "\n" +
+                                "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4)+ "\n" +
+                                "§7Distanz §8➜ §c" + distance+ "\n" +
+                                "\n" +
+                                "§8§m---------------------------------------\n" +
+                                "§cAntiReach §8(§c"+AntiReach.instance.getDescription().getVersion()+"§8) §7von SquareCode");
+            }
         } catch (Exception error) {
             Utils.instance.consoleMessage("§cCant kick player!", TYPE.ERROR);
             error.printStackTrace();
