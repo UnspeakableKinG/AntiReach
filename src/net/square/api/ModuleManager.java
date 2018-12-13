@@ -17,6 +17,7 @@ public class ModuleManager {
         new reach_d();
         new reach_e();
         new reach_f();
+        new reach_g();
     }
 
     public void setInstance() {

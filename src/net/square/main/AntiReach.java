@@ -1,9 +1,6 @@
 package net.square.main;
 
-import net.square.api.API;
-import net.square.api.AntiReachAPI;
-import net.square.api.Metrics;
-import net.square.api.ModuleManager;
+import net.square.api.*;
 import net.square.config.ConfigManager;
 import net.square.utils.*;
 import org.bukkit.plugin.java.JavaPlugin;

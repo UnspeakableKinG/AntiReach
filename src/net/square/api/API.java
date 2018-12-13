@@ -1,5 +1,6 @@
 package net.square.api;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import net.square.check.*;
 import net.square.commands.antireach_Command;
 import net.square.config.ConfigManager;
@@ -8,13 +9,22 @@ import net.square.event.QuitListener;
 import net.square.main.AntiReach;
 import net.square.utils.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.omg.CORBA.INTERNAL;
+import org.bukkit.potion.PotionEffect;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +62,7 @@ public class API {
     public double MAX_REACH_D;
     public double MAX_REACH_E;
     public double MAX_REACH_F;
+    public double MAX_REACH_G;
     public boolean consolelog;
     public boolean ownmessage;
     public boolean resetpitch;
@@ -61,9 +72,11 @@ public class API {
     public boolean REACH_D;
     public boolean REACH_E;
     public boolean REACH_F;
+    public boolean REACH_G;
     public boolean logFile;
     public boolean OWN_KICK_COMMAND;
-    /*-------------------------------------------------------------------------------------------------------*/
+    public String license;
+    public String address;
 
     public void loadValues() {
 
@@ -87,12 +100,14 @@ public class API {
         MAX_REACH_D = ConfigManager.instance.valuesfileconf.getDouble("Checks.D.maxreach");
         MAX_REACH_E = ConfigManager.instance.valuesfileconf.getDouble("Checks.E.maxreach");
         MAX_REACH_F = ConfigManager.instance.valuesfileconf.getDouble("Checks.F.maxinteract");
+        MAX_REACH_G = ConfigManager.instance.valuesfileconf.getDouble("Checks.G.maxreach");
         REACH_A = ConfigManager.instance.valuesfileconf.getBoolean("Checks.A.enable");
         REACH_B = ConfigManager.instance.valuesfileconf.getBoolean("Checks.B.enable");
         REACH_C = ConfigManager.instance.valuesfileconf.getBoolean("Checks.C.enable");
         REACH_D = ConfigManager.instance.valuesfileconf.getBoolean("Checks.D.enable");
         REACH_E = ConfigManager.instance.valuesfileconf.getBoolean("Checks.E.enable");
         REACH_F = ConfigManager.instance.valuesfileconf.getBoolean("Checks.F.enable");
+        REACH_G = ConfigManager.instance.valuesfileconf.getBoolean("Checks.G.enable");
         logFile = ConfigManager.instance.fileconfigfile.getBoolean("Settings.logFile");
         OWN_KICK_COMMAND = ConfigManager.instance.fileconfigfile.getBoolean("Settings.Reach.own-kick-command");
         reachlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick");
@@ -101,18 +116,40 @@ public class API {
 
     public void onStart() {
         // on start methode
-        Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
-        Utils.instance.consoleMessage(cpr + "§7Trying to load §cAntiReach§8...", TYPE.MESSAGE);
-        ConfigManager.instance.createConfig();
-        ConfigManager.instance.loadlanguageFile();
-        ConfigManager.instance.setDefaultLanguages();
-        ConfigManager.instance.loadvaluesFile();
-        ConfigManager.instance.setDefaultValues();
-        Utils.instance.consoleMessage(cpr + "§7Load files§8...", TYPE.MESSAGE);
-        checkProtocolLib();
-        Utils.instance.consoleMessage(cpr + "", TYPE.EMPTY);
-        starts();
+        try {
+            license = read("http://blackception.com/spigot/lizenzen/public.html");
+        } catch (IOException ex1) {
+            ex1.printStackTrace();
+        }
+
+        if (license.equals("public")) {
+            try {
+                address = InetAddress.getLocalHost().getHostAddress().toString();
+            } catch (UnknownHostException exception) {
+            }
+            Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
+            Utils.instance.consoleMessage(cpr + "§7Trying to load §cAntiReach§8...", TYPE.MESSAGE);
+            ConfigManager.instance.createConfig();
+            ConfigManager.instance.loadlanguageFile();
+            ConfigManager.instance.setDefaultLanguages();
+            ConfigManager.instance.loadvaluesFile();
+            ConfigManager.instance.setDefaultValues();
+            Utils.instance.consoleMessage(cpr + "§7Load files§8...", TYPE.MESSAGE);
+            checkProtocolLib();
+            Utils.instance.consoleMessage(cpr + "", TYPE.EMPTY);
+            starts();
+        } else {
+            Utils.instance.consoleMessage(cpr + "§cThe License is wrong!", TYPE.MESSAGE);
+            Utils.instance.consoleMessage(cpr + "§cPlease contact the system-developer if you believe that is an error", TYPE.MESSAGE);
+            Utils.instance.consoleMessage(cpr + "§cLicense: " + license, TYPE.MESSAGE);
+            Bukkit.getPluginManager().disablePlugin(AntiReach.instance);
+            try {
+                TimeUnit.SECONDS.sleep(6);
+            } catch (InterruptedException e) {
+            }
+        }
     }
+
 
     public void starts() {
         if (ConfigManager.instance.langfileconf.get("Language.lang").equals("DE") || ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
@@ -144,6 +181,16 @@ public class API {
         }
     }
 
+    public String getLoaded() {
+        final StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < Module.registered.size(); i++) {
+            final Module module = Module.registered.get(i);
+            builder.append(String.format("§c%s%s", i != 0 ? "§8, §c" : "", module.getBuchstaben()));
+        }
+        return builder.toString();
+    }
+
+    @Getter
     public static String getCurrentTime() {
         final SimpleDateFormat sdfDate = new SimpleDateFormat("HH:mm:ss");
         final Date now = new Date();
@@ -162,6 +209,7 @@ public class API {
         }
     }
 
+    @Getter
     public static String getCurrentDate() {
         final SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
         final Date now = new Date();
@@ -177,6 +225,7 @@ public class API {
         }
     }
 
+    @Getter
     private boolean ProtocolLIBStatus() {
         return Bukkit.getPluginManager().getPlugin("ProtocolLib") != null;
     }
@@ -194,36 +243,50 @@ public class API {
         AntiReach.instance.getCommand("antireach").setExecutor(new antireach_Command());
     }
 
-    public void kickPlayer(String player, String reason, String distance) {
+    private static String read(final String url) throws IOException {
+        final StringBuilder builder = new StringBuilder();
+        final URLConnection connection = new URL(url).openConnection();
+
+        connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+
+        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            int i;
+            while ((i = reader.read()) != -1) builder.append((char) i);
+        } finally {
+            return builder.toString();
+        }
+    }
+
+    public void kickPlayer(String player, String reason, String distance, ReachType type) {
         Player p = Bukkit.getPlayer(player);
         int ping = ((CraftPlayer) Bukkit.getPlayer(player)).getHandle().ping;
-        double tps =  TPSManager.getTPS();
+        double tps = TPSManager.getTPS();
 
         try {
-            if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+            if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
                 p.kickPlayer(
                         prefix + " §7Connection refused by server\n" +
                                 "§8§m---------------------------------------\n" +
                                 "\n" +
-                                "§7Reason §8➜ §c" + reason + "\n" +
+                                "§7Reason §8➜ §c" + reason + " §8(§c"+type+"§8)\n" +
                                 "§7Ping §8➜ §c" + ping + "\n" +
-                                "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4)+ "\n" +
-                                "§7Distance §8➜ §c" + distance+ "\n" +
+                                "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4) + "\n" +
+                                "§7Distance §8➜ §c" + distance + "\n" +
                                 "\n" +
                                 "§8§m---------------------------------------\n" +
-                                "§cAntiReach §8(§c"+AntiReach.instance.getDescription().getVersion()+"§8) §7by SquareCode");
+                                "§cAntiReach §8(§c" + AntiReach.instance.getDescription().getVersion() + "§8) §7by SquareCode");
             } else {
                 p.kickPlayer(
                         prefix + " §7Verbindung zum Server unterbrochen\n" +
                                 "§8§m---------------------------------------\n" +
                                 "\n" +
-                                "§7Grund §8➜ §c" + reason + "\n" +
+                                "§7Grund §8➜ §c" + reason + " §8(§c"+type+"§8)\n" +
                                 "§7Ping §8➜ §c" + ping + "\n" +
-                                "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4)+ "\n" +
-                                "§7Distanz §8➜ §c" + distance+ "\n" +
+                                "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4) + "\n" +
+                                "§7Distanz §8➜ §c" + distance + "\n" +
                                 "\n" +
                                 "§8§m---------------------------------------\n" +
-                                "§cAntiReach §8(§c"+AntiReach.instance.getDescription().getVersion()+"§8) §7von SquareCode");
+                                "§cAntiReach §8(§c" + AntiReach.instance.getDescription().getVersion() + "§8) §7von SquareCode");
             }
         } catch (Exception error) {
             Utils.instance.consoleMessage("§cCant kick player!", TYPE.ERROR);
@@ -281,10 +344,10 @@ public class API {
                         StorageUtils.log(Bukkit.getPlayer(player), API.getCurrentDate() + " / " + API.getCurrentTime() + " | " + Bukkit.getPlayer(player).getName() + " was kicked for Reach. His last reach was " + distance + " on ping " + ping + " and tps " + tps);
                     }
                     VLReach.remove(Bukkit.getPlayer(player).getUniqueId());
-                    if(OWN_KICK_COMMAND) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance));
+                    if (OWN_KICK_COMMAND) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance).replace("%syntax%", "conditionalcommands:cc %name% if (-ping-<800&-ping->5)&-tps->19.60 do"));
                     } else {
-                        kickPlayer(player, "Reach", distance);
+                        kickPlayer(player, "Reach", distance, type);
                     }
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         if (all.hasPermission(admin)) {

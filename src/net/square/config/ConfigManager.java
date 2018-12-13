@@ -30,13 +30,14 @@ public class ConfigManager {
         fileconfig = file;
         fileconfigfile = YamlConfiguration.loadConfiguration(file);
     }
+
     public void loadvaluesFile() {
         final File file = new File("plugins/AntiReach/values.yml");
         if (!file.exists()) {
             try {
                 file.createNewFile();
+            } catch (IOException ex) {
             }
-            catch (IOException ex) {}
         }
         this.valuesfile = file;
         this.valuesfileconf = YamlConfiguration.loadConfiguration(file);
@@ -47,8 +48,8 @@ public class ConfigManager {
         if (!file.exists()) {
             try {
                 file.createNewFile();
+            } catch (IOException ex) {
             }
-            catch (IOException ex) {}
         }
         this.langfile = file;
         this.langfileconf = YamlConfiguration.loadConfiguration(file);
@@ -60,8 +61,7 @@ public class ConfigManager {
         this.langfileconf.options().copyDefaults(true);
         try {
             this.langfileconf.save(this.langfile);
-        }
-        catch (IOException error) {
+        } catch (IOException error) {
             error.printStackTrace();
         }
     }
@@ -79,11 +79,12 @@ public class ConfigManager {
         this.valuesfileconf.addDefault("Checks.E.maxreach", 4.3);
         this.valuesfileconf.addDefault("Checks.F.enable", true);
         this.valuesfileconf.addDefault("Checks.F.maxinteract", 5.4);
+        this.valuesfileconf.addDefault("Checks.G.enable", true);
+        this.valuesfileconf.addDefault("Checks.G.maxreach", 3.9);
         this.valuesfileconf.options().copyDefaults(true);
         try {
             this.valuesfileconf.save(this.valuesfile);
-        }
-        catch (IOException error) {
+        } catch (IOException error) {
             error.printStackTrace();
         }
     }

@@ -16,10 +16,10 @@ public class QuitListener implements Listener {
         if (API.instance.verbosemode.contains(p.getName())) {
             API.instance.verbosemode.remove(p.getName());
         }
-        if(antireach_Command.accepted.contains(p.getName())) {
+        if (antireach_Command.accepted.contains(p.getName())) {
             antireach_Command.accepted.remove(p.getName());
         }
-        if(API.VLReach.containsKey(p.getUniqueId())) {
+        if (API.VLReach.containsKey(p.getUniqueId())) {
             API.VLReach.remove(p.getUniqueId());
         }
         if (API.instance.ID.containsKey(p.getUniqueId())) {

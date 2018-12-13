@@ -1,7 +1,9 @@
 package net.square.utils;
 
 import org.bukkit.entity.*;
+
 import java.io.*;
+
 /**
  * Copyright © SquareCode 2018
  * created on: 09.12.2018 / 13:37
@@ -23,8 +25,7 @@ public class StorageUtils {
         }
         try (final PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("plugins/AntiReach/Logs/" + player.getName().toLowerCase() + "/logs.log", true)))) {
             pw.println(log);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.out.println("[AntiReach] Warning: Unable to write log for " + player.getName() + "!");
         }

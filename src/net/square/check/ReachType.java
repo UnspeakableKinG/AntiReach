@@ -7,5 +7,5 @@ package net.square.check;
  */
 public enum ReachType {
 
-    A, B, C, D, E, F
+    A, B, C, D, E, F, G
 }

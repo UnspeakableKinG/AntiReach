@@ -1,5 +1,6 @@
 package net.square.utils;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.bukkit.Location;
 
 /**
@@ -15,6 +16,7 @@ public class MathUtil {
         instance = this;
     }
 
+    @Getter
     public double getDistance3D(Location one, Location two) {
         double toReturn = 0.0D;
         double xSqr = (two.getX() - one.getX()) * (two.getX() - one.getX());
@@ -25,6 +27,7 @@ public class MathUtil {
         return toReturn;
     }
 
+    @Getter
     public static double getHorizontalDistance(final Location to, final Location from) {
         final double x = Math.abs(Math.abs(to.getX()) - Math.abs(from.getX()));
         final double z = Math.abs(Math.abs(to.getZ()) - Math.abs(from.getZ()));

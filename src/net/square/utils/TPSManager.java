@@ -1,5 +1,6 @@
 package net.square.utils;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
 import net.square.main.AntiReach;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -20,7 +21,7 @@ public class TPSManager {
     public static double tps;
 
     public static void startTPSChecking() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin) AntiReach.instance, (Runnable)new Runnable() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask((Plugin) AntiReach.instance, (Runnable) new Runnable() {
             long seconds;
             long latestSeconds;
             int i;
@@ -30,8 +31,7 @@ public class TPSManager {
                 this.seconds = System.currentTimeMillis() / 1000L;
                 if (this.latestSeconds == this.seconds) {
                     ++this.i;
-                }
-                else {
+                } else {
                     this.latestSeconds = this.seconds;
                     TPSManager.tps = ((TPSManager.tps == 0.0) ? this.i : ((TPSManager.tps + this.i) / 2.0));
                     this.i = 0;
@@ -40,6 +40,7 @@ public class TPSManager {
         }, 1L, 1L);
     }
 
+    @Getter
     public static double getTPS() {
         return (TPSManager.tps + 1.0 > 20.0) ? 20.0 : (TPSManager.tps + 1.0);
     }

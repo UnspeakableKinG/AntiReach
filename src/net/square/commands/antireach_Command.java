@@ -81,7 +81,7 @@ public class antireach_Command implements CommandExecutor {
                 } else {
                     p.sendMessage(API.instance.prefix + " §7Running §cAntiReach §8(§c" + AntiReach.instance.getDescription().getVersion() + "§8)§7 by SquareCode");
                     p.sendMessage(API.instance.prefix + " §7Id§8: §7AntiReachDE / " + API.instance.ID.get(p.getUniqueId()));
-                    p.sendMessage(API.instance.prefix + " §7Licensed to§8: §7mc.golicraft.net");
+                    p.sendMessage(API.instance.prefix + " §7Licensed to§8: §7" + API.instance.license);
                 }
             }
 
@@ -89,12 +89,11 @@ public class antireach_Command implements CommandExecutor {
             sender.sendMessage(API.instance.Stripline);
             sender.sendMessage(API.instance.cpr + "§7Running §cAntiReach §8(§c" + AntiReach.instance.getDescription().getVersion() + "§8)§7 by SquareCode");
             sender.sendMessage(API.instance.cpr + "§7Id§8: §7AntiReachDE / CONSOLE");
-            sender.sendMessage(API.instance.cpr + "§7Licensed to§8: §7mc.golicraft.net");
+            sender.sendMessage(API.instance.cpr + "§7Licensed to§8: §7" + API.instance.license);
             sender.sendMessage(API.instance.cpr + "§7Date/Time§8: §c" + API.getCurrentDate() + "§8/§c" + API.getCurrentTime());
-            sender.sendMessage(API.instance.cpr + "§7TPS§8: §c" + String.valueOf(TPSManager.getTPS()).substring(0, 4));
+            sender.sendMessage(API.instance.cpr + "§7TPS§8: §c" + TPSManager.getTPS());
             sender.sendMessage(API.instance.Stripline);
         }
-
         return true;
     }
 }

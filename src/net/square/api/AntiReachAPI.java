@@ -16,12 +16,15 @@ public class AntiReachAPI {
     public void setInstance() {
         instance = this;
     }
+
     public void clearReachVL() {
         API.VLReach.clear();
     }
+
     public void disablePlugin() {
         Bukkit.getPluginManager().disablePlugin(AntiReach.instance);
     }
+
     public void enablePlugin() {
         Bukkit.getPluginManager().enablePlugin(AntiReach.instance);
     }
