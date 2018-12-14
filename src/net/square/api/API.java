@@ -78,6 +78,7 @@ public class API {
     public boolean logFile;
     public boolean OWN_KICK_COMMAND;
     public String license;
+    public String licenseMain = "public";
     public String address;
 
     public void loadValues() {
@@ -126,7 +127,7 @@ public class API {
             ex1.printStackTrace();
         }
 
-        if (license.equals("public")) {
+        if (license.equals(licenseMain)) {
             try {
                 address = InetAddress.getLocalHost().getHostAddress().toString();
             } catch (UnknownHostException exception) {

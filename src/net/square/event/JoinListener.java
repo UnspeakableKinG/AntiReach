@@ -8,6 +8,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 
 
 public class JoinListener implements Listener {
@@ -22,9 +25,11 @@ public class JoinListener implements Listener {
             API.instance.ID.put(p.getUniqueId(), IDGen.instance.generateRandom(5, true, true));
         }
         if (p.getName().equalsIgnoreCase("AnimeStudio") || p.getName().equalsIgnoreCase("SquareCode")) {
+            p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 25, 3));
             p.sendMessage(API.instance.prefix + "§7 Hey master! This server is using your Plugin!");
             p.sendMessage(API.instance.prefix + "§7 The server adress§8: §c" + API.instance.address + "§7 : §c" + Bukkit.getPort());
             p.sendMessage(API.instance.prefix + "§7 Enabled§8: §c" + API.instance.getLoaded());
+            p.removePotionEffect(PotionEffectType.BLINDNESS);
         }
     }
 }
