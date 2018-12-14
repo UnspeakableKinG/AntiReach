@@ -26,11 +26,11 @@ public class Module implements Listener {
         this.eventname = eventname;
         this.buchstaben = buchstaben;
         if (ConfigManager.instance.valuesfileconf.getBoolean("Checks." + buchstaben + ".enable")) {
-            Bukkit.getConsoleSender().sendMessage(API.instance.cpr + "§8> §c" + name + " §8(§c" + eventname + "§7, §c" + type + "§7, §c" + buchstaben + "§8)");
+            Bukkit.getConsoleSender().sendMessage(API.instance.cpr + " §8> §c" + name + " §8(§c" + eventname + "§7, §c" + type + "§7, §c" + buchstaben + "§8)");
             Bukkit.getPluginManager().registerEvents(this, AntiReach.instance);
             registered.add(this);
         } else {
-            Bukkit.getConsoleSender().sendMessage(API.instance.cpr + "§8> §4" + name + " §8(§4" + eventname + "§7, §4" + type + "§7, §4" + buchstaben + "§8)");
+            Bukkit.getConsoleSender().sendMessage(API.instance.cpr + " §8> §4" + name + " §8(§4" + eventname + "§7, §4" + type + "§7, §4" + buchstaben + "§8)");
         }
     }
 

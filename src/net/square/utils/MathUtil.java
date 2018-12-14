@@ -2,6 +2,7 @@ package net.square.utils;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 /**
  * Copyright © SquareCode 2018
@@ -32,5 +33,11 @@ public class MathUtil {
         final double x = Math.abs(Math.abs(to.getX()) - Math.abs(from.getX()));
         final double z = Math.abs(Math.abs(to.getZ()) - Math.abs(from.getZ()));
         return Math.sqrt(x * x + z * z);
+    }
+    @Getter
+    public Location getEyeLocation(final Player player) {
+        final Location eye = player.getLocation();
+        eye.setY(eye.getY() + player.getEyeHeight());
+        return eye;
     }
 }

@@ -63,6 +63,7 @@ public class API {
     public double MAX_REACH_E;
     public double MAX_REACH_F;
     public double MAX_REACH_G;
+    public double MAX_REACH_H;
     public boolean consolelog;
     public boolean ownmessage;
     public boolean resetpitch;
@@ -73,6 +74,7 @@ public class API {
     public boolean REACH_E;
     public boolean REACH_F;
     public boolean REACH_G;
+    public boolean REACH_H;
     public boolean logFile;
     public boolean OWN_KICK_COMMAND;
     public String license;
@@ -101,6 +103,7 @@ public class API {
         MAX_REACH_E = ConfigManager.instance.valuesfileconf.getDouble("Checks.E.maxreach");
         MAX_REACH_F = ConfigManager.instance.valuesfileconf.getDouble("Checks.F.maxinteract");
         MAX_REACH_G = ConfigManager.instance.valuesfileconf.getDouble("Checks.G.maxreach");
+        MAX_REACH_H = ConfigManager.instance.valuesfileconf.getDouble("Checks.H.maxreach");
         REACH_A = ConfigManager.instance.valuesfileconf.getBoolean("Checks.A.enable");
         REACH_B = ConfigManager.instance.valuesfileconf.getBoolean("Checks.B.enable");
         REACH_C = ConfigManager.instance.valuesfileconf.getBoolean("Checks.C.enable");
@@ -108,13 +111,14 @@ public class API {
         REACH_E = ConfigManager.instance.valuesfileconf.getBoolean("Checks.E.enable");
         REACH_F = ConfigManager.instance.valuesfileconf.getBoolean("Checks.F.enable");
         REACH_G = ConfigManager.instance.valuesfileconf.getBoolean("Checks.G.enable");
+        REACH_H = ConfigManager.instance.valuesfileconf.getBoolean("Checks.H.enable");
         logFile = ConfigManager.instance.fileconfigfile.getBoolean("Settings.logFile");
         OWN_KICK_COMMAND = ConfigManager.instance.fileconfigfile.getBoolean("Settings.Reach.own-kick-command");
         reachlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick");
         reachcommand = ConfigManager.instance.fileconfigfile.getString("Settings.Reach.kick-command");
     }
 
-    public void onStart() {
+    public void onStart() throws UnknownHostException {
         // on start methode
         try {
             license = read("http://blackception.com/spigot/lizenzen/public.html");
@@ -164,6 +168,7 @@ public class API {
             Utils.instance.consoleMessage(cpr + "§7Stopping §cModuleManager§8...", TYPE.MESSAGE);
             Utils.instance.consoleMessage(cpr + "", TYPE.EMPTY);
             AntiReach.instance.current = System.currentTimeMillis() - AntiReach.instance.current;
+            Utils.instance.consoleMessage(cpr + "§7License§8: §c" + license + " §7bound to§8: §c" + address, TYPE.MESSAGE);
             Utils.instance.consoleMessage(cpr + "§cAntiReach §7loaded sucessfully§8! §8(§c" + ConfigManager.instance.langfileconf.get("Language.lang") + "§7, §c" + AntiReach.current + "ms§7, §c" + this.getCurrentTime() + "§7, §c" + this.getCurrentDate() + "§8)", TYPE.MESSAGE);
             Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
             setDefaults();
@@ -268,7 +273,7 @@ public class API {
                         prefix + " §7Connection refused by server\n" +
                                 "§8§m---------------------------------------\n" +
                                 "\n" +
-                                "§7Reason §8➜ §c" + reason + " §8(§c"+type+"§8)\n" +
+                                "§7Reason §8➜ §c" + reason + " §8(§c" + type + "§8)\n" +
                                 "§7Ping §8➜ §c" + ping + "\n" +
                                 "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4) + "\n" +
                                 "§7Distance §8➜ §c" + distance + "\n" +
@@ -280,7 +285,7 @@ public class API {
                         prefix + " §7Verbindung zum Server unterbrochen\n" +
                                 "§8§m---------------------------------------\n" +
                                 "\n" +
-                                "§7Grund §8➜ §c" + reason + " §8(§c"+type+"§8)\n" +
+                                "§7Grund §8➜ §c" + reason + " §8(§c" + type + "§8)\n" +
                                 "§7Ping §8➜ §c" + ping + "\n" +
                                 "§7TPS §8➜ §c" + String.valueOf(tps).substring(0, 4) + "\n" +
                                 "§7Distanz §8➜ §c" + distance + "\n" +

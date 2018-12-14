@@ -81,6 +81,8 @@ public class ConfigManager {
         this.valuesfileconf.addDefault("Checks.F.maxinteract", 5.4);
         this.valuesfileconf.addDefault("Checks.G.enable", true);
         this.valuesfileconf.addDefault("Checks.G.maxreach", 3.9);
+        this.valuesfileconf.addDefault("Checks.H.enable", true);
+        this.valuesfileconf.addDefault("Checks.H.maxreach", 4.0);
         this.valuesfileconf.options().copyDefaults(true);
         try {
             this.valuesfileconf.save(this.valuesfile);
