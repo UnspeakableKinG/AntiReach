@@ -65,6 +65,7 @@ public class API {
     public double MAX_REACH_G;
     public double MAX_REACH_H;
     public boolean consolelog;
+    public boolean startlog;
     public boolean ownmessage;
     public boolean resetpitch;
     public boolean REACH_A;
@@ -89,7 +90,7 @@ public class API {
          * (net.square.config.ConfigManager)
          */
 
-        prefix = ConfigManager.instance.fileconfigfile.getString("Prefix").replace("<s>", "┃").replace("<p>", "●").replace("<pk>", "•").replace(">>", "»").replace("<<", "«").replace("<st>", "×").replace("&", "§").replace("<d>", "►").replace("<sb>", "▎");
+        prefix = ConfigManager.instance.fileconfigfile.getString("Prefix").replace("<s>", "┃").replace("<p>", "●").replace("<pk>", "•").replace(">>", "»").replace("<<", "«").replace("<st>", "×").replace("&", "§").replace("<d>", "►").replace("<sb>", "▎").replace("<e>", "▪");
         noperm = ConfigManager.instance.fileconfigfile.getString("General.NoPermissions").replace("&", "§").replace("%prefix%", prefix);
         bypass = ConfigManager.instance.fileconfigfile.getString("Permissions.bypass");
         admin = ConfigManager.instance.fileconfigfile.getString("Permissions.admin");
@@ -114,6 +115,7 @@ public class API {
         REACH_G = ConfigManager.instance.valuesfileconf.getBoolean("Checks.G.enable");
         REACH_H = ConfigManager.instance.valuesfileconf.getBoolean("Checks.H.enable");
         logFile = ConfigManager.instance.fileconfigfile.getBoolean("Settings.logFile");
+        startlog = ConfigManager.instance.fileconfigfile.getBoolean("Settings.startLog");
         OWN_KICK_COMMAND = ConfigManager.instance.fileconfigfile.getBoolean("Settings.Reach.own-kick-command");
         reachlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick");
         reachcommand = ConfigManager.instance.fileconfigfile.getString("Settings.Reach.kick-command");
@@ -172,6 +174,15 @@ public class API {
             Utils.instance.consoleMessage(cpr + "§7License§8: §c" + license + " §7bound to§8: §c" + address, TYPE.MESSAGE);
             Utils.instance.consoleMessage(cpr + "§cAntiReach §7loaded sucessfully§8! §8(§c" + ConfigManager.instance.langfileconf.get("Language.lang") + "§7, §c" + AntiReach.current + "ms§7, §c" + this.getCurrentTime() + "§7, §c" + this.getCurrentDate() + "§8)", TYPE.MESSAGE);
             Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
+            if(startlog) {
+                String date = API.getCurrentDate();
+                String time = API.getCurrentTime().replace(":", "-");
+                StorageUtils.logStart(date+"/"+time+" | AntiReach started sucessfully in "+String.valueOf(AntiReach.current)+"ms!");
+                StorageUtils.logStart(date+"/"+time+" | Enabled Checks: "+getLoaded().replace("§c", "").replace("§8", ""));
+                StorageUtils.logStart(date+"/"+time+" | Loaded on License: "+license);
+                StorageUtils.logStart(date+"/"+time+" | ProtocolLib-State: "+ProtocolLIBStatus());
+                StorageUtils.logStart(date+"/"+time+" | Loaded-language: "+ConfigManager.instance.langfileconf.get("Language.lang"));
+            }
             setDefaults();
             startTask();
             TPSManager.startTPSChecking();
@@ -198,7 +209,7 @@ public class API {
 
     @Getter
     public static String getCurrentTime() {
-        final SimpleDateFormat sdfDate = new SimpleDateFormat("HH:mm:ss");
+        final SimpleDateFormat sdfDate = new SimpleDateFormat("HH:mm");
         final Date now = new Date();
         final String strDate = sdfDate.format(now);
         return strDate;
@@ -348,6 +359,11 @@ public class API {
                 if (API.VLReach.get(Bukkit.getPlayer(player).getUniqueId()) == ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick")) {
                     if (logFile) {
                         StorageUtils.log(Bukkit.getPlayer(player), API.getCurrentDate() + " / " + API.getCurrentTime() + " | " + Bukkit.getPlayer(player).getName() + " was kicked for Reach. His last reach was " + distance + " on ping " + ping + " and tps " + tps);
+                        if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                            Utils.instance.consoleMessage(prefix+" §a[CONSOLE] §7Sucessfully writing log for "+player, TYPE.MESSAGE);
+                        } else {
+                            Utils.instance.consoleMessage(prefix+" §a[KONSOLE] §7Log für "+player+ "wurde erfolgreich geschrieben", TYPE.MESSAGE);
+                        }
                     }
                     VLReach.remove(Bukkit.getPlayer(player).getUniqueId());
                     if (OWN_KICK_COMMAND) {
