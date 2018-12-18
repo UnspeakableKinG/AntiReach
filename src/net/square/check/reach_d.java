@@ -35,6 +35,9 @@ public class reach_d extends Module {
                 if (player.getGameMode() != GameMode.CREATIVE) {
                     if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
 
+                        if(API.instance.bypassmode.contains(player.getName())) {
+                            return;
+                        }
                         Player P = (Player) event.getDamager();
                         Location loc = player.getLocation();
                         Location loc2 = event.getEntity().getLocation();

@@ -36,6 +36,10 @@ public class reach_b extends Module {
                 if (player.getGameMode() != GameMode.CREATIVE) {
                     if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
 
+                        if(API.instance.bypassmode.contains(player.getName())) {
+                            return;
+                        }
+
                         double distance = MathUtil.instance.getHorizontalDistance(player.getLocation(), event.getEntity().getLocation()) - 0.3;
                         double maxReach = 3.4;
                         final double yawDifference = 0.01 - Math.abs(Math.abs(player.getEyeLocation().getYaw()) - Math.abs(event.getEntity().getLocation().getYaw()));

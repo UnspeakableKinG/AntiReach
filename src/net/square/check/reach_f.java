@@ -25,6 +25,9 @@ public class reach_f extends Module {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInteract(final PlayerInteractEvent e) {
         final Player p = e.getPlayer();
+        if(API.instance.bypassmode.contains(p.getName())) {
+            return;
+        }
         if (e.getClickedBlock() != null) {
             int ping = ((CraftPlayer) p).getHandle().ping;
             if (ping > 200) {

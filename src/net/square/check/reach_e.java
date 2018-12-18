@@ -36,6 +36,9 @@ public class reach_e extends Module {
                 if (player.getGameMode() != GameMode.CREATIVE) {
                     if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
 
+                        if(API.instance.bypassmode.contains(player.getName())) {
+                            return;
+                        }
                         double distance = MathUtil.instance.getDistance3D(player.getLocation(), event.getEntity().getLocation());
 
                         /*-------------------------------[ ADDITIVE ]-------------------------------*/

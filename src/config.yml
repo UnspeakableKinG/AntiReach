@@ -29,6 +29,50 @@ Permissions:
   #Get only the verbose messages from the system.
   verbose: "AntiReach.verbose"
 
+Checks:
+  A:
+    enable: true
+    maxreach: 4.3
+  B:
+    enable: true
+    maxreach: 4.25
+  C:
+    enable: true
+    maxreach: 4.3
+  D:
+    enable: true
+    maxreach: 4.2
+  E:
+    enable: true
+    maxreach: 4.25
+  F:
+    enable: true
+    maxinteract: 5.4
+  G:
+    enable: true
+    maxreach: 3.9
+  H:
+    enable: true
+    maxreach: 4.0
+  I:
+    enable: true
+    maxreach: 3.9
+
+Language:
+  #You can change the language to: DE, EN
+  lang: EN
+
+Messages:
+  #%prefix% Prefix of the plugin
+  #%player% Name of the player
+  #%description% Hack description
+  #%reach% Players hit range
+  #%ping% Players ping
+  #%tps% Server TPS
+  #%type% HackType (Combat)
+  #%vl% VL Level of the player
+  check: "%prefix% &7%player% is suspected with Reach: %description% (R: %reach%, P: %ping%, TPS: %tps%, T: %type%) &cx%vl%"
+
 Settings:
   #Can spam the console full of news.
   #Use it at your own risk!
@@ -39,6 +83,8 @@ Settings:
   logFile: true
   #Logs the start mechanics from antireach to a log-file
   startLog: true
+  #Check Update on start / on join
+  checkUpdate: true
   #Edit the Settings for the Check: Reach
   Reach:
     min-level-to-kick: 30

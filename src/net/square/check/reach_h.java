@@ -31,7 +31,9 @@ public class reach_h extends Module {
                 final Player damaged = (Player) event.getEntity();
                 if (player.getGameMode() != GameMode.CREATIVE) {
                     if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
-
+                        if(API.instance.bypassmode.contains(player.getName())) {
+                            return;
+                        }
                         /*-------------------------------[ ADDITIVE ]-------------------------------*/
                         int ping = ((CraftPlayer) player).getHandle().ping;
                         double tps = TPSManager.instance.getTPS();
@@ -40,7 +42,6 @@ public class reach_h extends Module {
                         final double YawDifference = Math.abs(180.0f - Math.abs(damaged.getLocation().getYaw() - player.getLocation().getYaw()));
                         double Difference = MathUtil.instance.getEyeLocation(player).distance(damaged.getEyeLocation()) - 0.35;
                         final int Ping = ((CraftPlayer) player).getHandle().ping;
-                        final double TPS = TPSManager.getTPS();
                         double MaxReach = API.instance.MAX_REACH_H + damaged.getVelocity().length();
                         if (player.isSprinting()) {
                             MaxReach += 0.2;
@@ -67,7 +68,6 @@ public class reach_h extends Module {
                             event.setCancelled(true);
                             API.instance.pokeReach(player.getName(), "higher range as < " + API.instance.MAX_REACH_H, ddistance, ping, tps, ReachType.H, API.VLReach.get(player.getUniqueId()));
                         }
-
                     }
                 }
             }

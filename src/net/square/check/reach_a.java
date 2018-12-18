@@ -34,6 +34,8 @@ public class reach_a extends Module {
                     if (player.getGameMode() != GameMode.CREATIVE) {
                         if (!player.hasPermission(API.instance.bypass) || !player.hasPermission(API.instance.admin)) {
 
+
+
                             /*--------------------------------------------------------------*/
 
                             Location entityLoc = target.getLocation().add(0.0D, target.getEyeHeight(), 0.0D);

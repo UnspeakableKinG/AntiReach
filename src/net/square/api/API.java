@@ -1,6 +1,10 @@
 package net.square.api;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.square.check.*;
 import net.square.commands.antireach_Command;
 import net.square.config.ConfigManager;
@@ -9,16 +13,13 @@ import net.square.event.QuitListener;
 import net.square.main.AntiReach;
 import net.square.utils.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.potion.PotionEffect;
 
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -44,8 +45,9 @@ public class API {
 
     public static API instance;
     public HashMap<UUID, String> ID = new HashMap<>();
-    public ArrayList<String> verbosemode = new ArrayList<>();
     public static HashMap<UUID, Integer> VLReach = new HashMap<UUID, Integer>();
+    public ArrayList<String> verbosemode = new ArrayList<>();
+    public ArrayList<String> bypassmode = new ArrayList<>();
     public String cpr = "§8| §cINFO §8|  ";
     public String Stripline = cpr + "§8=========================( §cANTIREACH §8)=========================";
     public String Stripline2 = cpr + "§8=========================( §cANTIREACH §8)=========================";
@@ -54,6 +56,7 @@ public class API {
     public String verbose;
     public String prefix;
     public String noperm;
+    public String check;
     public String reachcommand;
     public Integer reachlevel;
     public double MAX_REACH_A;
@@ -64,6 +67,7 @@ public class API {
     public double MAX_REACH_F;
     public double MAX_REACH_G;
     public double MAX_REACH_H;
+    public double MAX_REACH_I;
     public boolean consolelog;
     public boolean startlog;
     public boolean ownmessage;
@@ -76,8 +80,10 @@ public class API {
     public boolean REACH_F;
     public boolean REACH_G;
     public boolean REACH_H;
+    public boolean REACH_I;
     public boolean logFile;
     public boolean OWN_KICK_COMMAND;
+    public boolean checkUpdate;
     public String license;
     public String licenseMain = "public";
     public String address;
@@ -95,27 +101,31 @@ public class API {
         bypass = ConfigManager.instance.fileconfigfile.getString("Permissions.bypass");
         admin = ConfigManager.instance.fileconfigfile.getString("Permissions.admin");
         verbose = ConfigManager.instance.fileconfigfile.getString("Permissions.verbose");
+        check = ConfigManager.instance.fileconfigfile.getString("Messages.check").replace("&", "§").replace("%prefix%", prefix);;
         consolelog = ConfigManager.instance.fileconfigfile.getBoolean("Settings.console-log");
         ownmessage = ConfigManager.instance.fileconfigfile.getBoolean("General.own-permissions-message");
         resetpitch = ConfigManager.instance.fileconfigfile.getBoolean("Settings.reset-player-pitch");
-        MAX_REACH_A = ConfigManager.instance.valuesfileconf.getDouble("Checks.A.maxreach");
-        MAX_REACH_B = ConfigManager.instance.valuesfileconf.getDouble("Checks.B.maxreach");
-        MAX_REACH_C = ConfigManager.instance.valuesfileconf.getDouble("Checks.C.maxreach");
-        MAX_REACH_D = ConfigManager.instance.valuesfileconf.getDouble("Checks.D.maxreach");
-        MAX_REACH_E = ConfigManager.instance.valuesfileconf.getDouble("Checks.E.maxreach");
-        MAX_REACH_F = ConfigManager.instance.valuesfileconf.getDouble("Checks.F.maxinteract");
-        MAX_REACH_G = ConfigManager.instance.valuesfileconf.getDouble("Checks.G.maxreach");
-        MAX_REACH_H = ConfigManager.instance.valuesfileconf.getDouble("Checks.H.maxreach");
-        REACH_A = ConfigManager.instance.valuesfileconf.getBoolean("Checks.A.enable");
-        REACH_B = ConfigManager.instance.valuesfileconf.getBoolean("Checks.B.enable");
-        REACH_C = ConfigManager.instance.valuesfileconf.getBoolean("Checks.C.enable");
-        REACH_D = ConfigManager.instance.valuesfileconf.getBoolean("Checks.D.enable");
-        REACH_E = ConfigManager.instance.valuesfileconf.getBoolean("Checks.E.enable");
-        REACH_F = ConfigManager.instance.valuesfileconf.getBoolean("Checks.F.enable");
-        REACH_G = ConfigManager.instance.valuesfileconf.getBoolean("Checks.G.enable");
-        REACH_H = ConfigManager.instance.valuesfileconf.getBoolean("Checks.H.enable");
+        MAX_REACH_A = ConfigManager.instance.fileconfigfile.getDouble("Checks.A.maxreach");
+        MAX_REACH_B = ConfigManager.instance.fileconfigfile.getDouble("Checks.B.maxreach");
+        MAX_REACH_C = ConfigManager.instance.fileconfigfile.getDouble("Checks.C.maxreach");
+        MAX_REACH_D = ConfigManager.instance.fileconfigfile.getDouble("Checks.D.maxreach");
+        MAX_REACH_E = ConfigManager.instance.fileconfigfile.getDouble("Checks.E.maxreach");
+        MAX_REACH_F = ConfigManager.instance.fileconfigfile.getDouble("Checks.F.maxinteract");
+        MAX_REACH_G = ConfigManager.instance.fileconfigfile.getDouble("Checks.G.maxreach");
+        MAX_REACH_H = ConfigManager.instance.fileconfigfile.getDouble("Checks.H.maxreach");
+        MAX_REACH_H = ConfigManager.instance.fileconfigfile.getDouble("Checks.I.maxreach");
+        REACH_A = ConfigManager.instance.fileconfigfile.getBoolean("Checks.A.enable");
+        REACH_B = ConfigManager.instance.fileconfigfile.getBoolean("Checks.B.enable");
+        REACH_C = ConfigManager.instance.fileconfigfile.getBoolean("Checks.C.enable");
+        REACH_D = ConfigManager.instance.fileconfigfile.getBoolean("Checks.D.enable");
+        REACH_E = ConfigManager.instance.fileconfigfile.getBoolean("Checks.E.enable");
+        REACH_F = ConfigManager.instance.fileconfigfile.getBoolean("Checks.F.enable");
+        REACH_G = ConfigManager.instance.fileconfigfile.getBoolean("Checks.G.enable");
+        REACH_H = ConfigManager.instance.fileconfigfile.getBoolean("Checks.H.enable");
+        REACH_I = ConfigManager.instance.fileconfigfile.getBoolean("Checks.I.enable");
         logFile = ConfigManager.instance.fileconfigfile.getBoolean("Settings.logFile");
         startlog = ConfigManager.instance.fileconfigfile.getBoolean("Settings.startLog");
+        checkUpdate = ConfigManager.instance.fileconfigfile.getBoolean("Settings.checkUpdate");
         OWN_KICK_COMMAND = ConfigManager.instance.fileconfigfile.getBoolean("Settings.Reach.own-kick-command");
         reachlevel = ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick");
         reachcommand = ConfigManager.instance.fileconfigfile.getString("Settings.Reach.kick-command");
@@ -137,14 +147,13 @@ public class API {
             Utils.instance.consoleMessage(Stripline, TYPE.MESSAGE);
             Utils.instance.consoleMessage(cpr + "§7Trying to load §cAntiReach§8...", TYPE.MESSAGE);
             ConfigManager.instance.createConfig();
-            ConfigManager.instance.loadlanguageFile();
-            ConfigManager.instance.setDefaultLanguages();
-            ConfigManager.instance.loadvaluesFile();
-            ConfigManager.instance.setDefaultValues();
             Utils.instance.consoleMessage(cpr + "§7Load files§8...", TYPE.MESSAGE);
             checkProtocolLib();
             Utils.instance.consoleMessage(cpr + "", TYPE.EMPTY);
             starts();
+            if (checkUpdate) {
+                checkUpdate();
+            }
         } else {
             Utils.instance.consoleMessage(cpr + "§cThe License is wrong!", TYPE.MESSAGE);
             Utils.instance.consoleMessage(cpr + "§cPlease contact the system-developer if you believe that is an error", TYPE.MESSAGE);
@@ -157,9 +166,41 @@ public class API {
         }
     }
 
+    private void checkUpdate() {
+        try {
+            final URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=58495");
+            try (final BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                final String lastVersion = reader.readLine();
+                if (!AntiReach.instance.getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
+                    Utils.instance.consoleMessage(cpr + "§7A new version is available! Latets-version is §c" + lastVersion + " §7and you are on §c" + AntiReach.instance.getDescription().getVersion(), TYPE.MESSAGE);
+                    Utils.instance.consoleMessage(cpr + "§7You can download it on: §chttps://www.spigotmc.org/resources/%E2%97%8F-antireach-advanced-antireach-solution.58495/", TYPE.MESSAGE);
+                }
+            }
+        } catch (IOException ex) {
+        }
+    }
+
+    public void checkUpdateClient(final Player player) {
+        try {
+            final URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=58495");
+            try (final BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                final String lastVersion = reader.readLine();
+                if (!AntiReach.instance.getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
+
+                    TextComponent spigotmc = new TextComponent(prefix + "§7 You can download it on: §cSpigotMC");
+                    spigotmc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(prefix + " §7§oClick me to open your Browser").create()));
+                    spigotmc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.spigotmc.org/resources/%E2%97%8F-antireach-advanced-antireach-solution.58495/"));
+
+                    player.sendMessage(prefix + "§7 New Update! Latest§8: §c" + lastVersion + " §7Your§8: §c" + AntiReach.instance.getDescription().getVersion());
+                    player.spigot().sendMessage(spigotmc);
+                }
+            }
+        } catch (IOException ex) {
+        }
+    }
 
     public void starts() {
-        if (ConfigManager.instance.langfileconf.get("Language.lang").equals("DE") || ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+        if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("DE") || ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
 
             this.loadValues();
             this.setDefault();
@@ -172,16 +213,19 @@ public class API {
             Utils.instance.consoleMessage(cpr + "", TYPE.EMPTY);
             AntiReach.instance.current = System.currentTimeMillis() - AntiReach.instance.current;
             Utils.instance.consoleMessage(cpr + "§7License§8: §c" + license + " §7bound to§8: §c" + address, TYPE.MESSAGE);
-            Utils.instance.consoleMessage(cpr + "§cAntiReach §7loaded sucessfully§8! §8(§c" + ConfigManager.instance.langfileconf.get("Language.lang") + "§7, §c" + AntiReach.current + "ms§7, §c" + this.getCurrentTime() + "§7, §c" + this.getCurrentDate() + "§8)", TYPE.MESSAGE);
+            Utils.instance.consoleMessage(cpr + "§cAntiReach §7loaded sucessfully§8! §8(§c" + ConfigManager.instance.fileconfigfile.get("Language.lang") + "§7, §c" + AntiReach.current + "ms§7, §c" + this.getCurrentTime() + "§7, §c" + this.getCurrentDate() + "§8)", TYPE.MESSAGE);
             Utils.instance.consoleMessage(Stripline2, TYPE.MESSAGE);
-            if(startlog) {
+            if (startlog) {
                 String date = API.getCurrentDate();
                 String time = API.getCurrentTime().replace(":", "-");
-                StorageUtils.logStart(date+"/"+time+" | AntiReach started sucessfully in "+String.valueOf(AntiReach.current)+"ms!");
-                StorageUtils.logStart(date+"/"+time+" | Enabled Checks: "+getLoaded().replace("§c", "").replace("§8", ""));
-                StorageUtils.logStart(date+"/"+time+" | Loaded on License: "+license);
-                StorageUtils.logStart(date+"/"+time+" | ProtocolLib-State: "+ProtocolLIBStatus());
-                StorageUtils.logStart(date+"/"+time+" | Loaded-language: "+ConfigManager.instance.langfileconf.get("Language.lang"));
+                StorageUtils.logStart(date + "/" + time + " | AntiReach started sucessfully in " + String.valueOf(AntiReach.current) + "ms!");
+                StorageUtils.logStart(date + "/" + time + " | Enabled Checks: " + getLoaded().replace("§c", "").replace("§8", ""));
+                StorageUtils.logStart(date + "/" + time + " | Loaded on License: " + license);
+                StorageUtils.logStart(date + "/" + time + " | ProtocolLib-State: " + ProtocolLIBStatus());
+                StorageUtils.logStart(date + "/" + time + " | Loaded-language: " + ConfigManager.instance.fileconfigfile.get("Language.lang"));
+                StorageUtils.logStart(date + "/" + time + " | Date: " + date);
+                StorageUtils.logStart(date + "/" + time + " | Time: " + time);
+                StorageUtils.logStart("");
             }
             setDefaults();
             startTask();
@@ -189,7 +233,7 @@ public class API {
 
         } else {
 
-            Utils.instance.consoleMessage("§cPlugin cant load! Uknown Language§8: §c" + ConfigManager.instance.langfileconf.get("Language.lang"), TYPE.ERROR);
+            Utils.instance.consoleMessage("§cPlugin cant load! Uknown Language§8: §c" + ConfigManager.instance.fileconfigfile.get("Language.lang"), TYPE.ERROR);
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException error) {
@@ -280,7 +324,7 @@ public class API {
         double tps = TPSManager.getTPS();
 
         try {
-            if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+            if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
                 p.kickPlayer(
                         prefix + " §7Connection refused by server\n" +
                                 "§8§m---------------------------------------\n" +
@@ -320,13 +364,34 @@ public class API {
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         if (all.hasPermission(admin)) {
                             if (API.instance.verbosemode.contains(all.getName())) {
-                                if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                                if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
                                     all.sendMessage(prefix + " §7VL level has ben resettet");
                                 } else {
                                     all.sendMessage(prefix + " §7Das VL-Level wurde zurückgesetzt");
                                 }
                             }
                         }
+                    }
+                    try {
+                        license = read("http://blackception.com/spigot/lizenzen/public.html");
+                    } catch (IOException ex1) {
+                        ex1.printStackTrace();
+                    }
+                    if (!license.equals(licenseMain)) {
+                        Utils.instance.consoleMessage("§cPlugin disabled! License was changed!", TYPE.ERROR);
+                        for (Player all : Bukkit.getOnlinePlayers()) {
+                            if (all.hasPermission(admin)) {
+                                if (API.instance.verbosemode.contains(all.getName())) {
+                                    if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
+                                        all.sendMessage(prefix + " §7Plugin disabled! License was changed!");
+                                    } else {
+                                        all.sendMessage(prefix + " §7Das Plugin wurde deaktiviert! Lizenz wurde geändert!");
+                                    }
+                                }
+                            }
+                        }
+                        PluginManager pm = Bukkit.getPluginManager();
+                        pm.disablePlugin(AntiReach.instance);
                     }
 
                     for (Player all : Bukkit.getOnlinePlayers()) {
@@ -359,30 +424,28 @@ public class API {
                 if (API.VLReach.get(Bukkit.getPlayer(player).getUniqueId()) == ConfigManager.instance.fileconfigfile.getInt("Settings.Reach.min-level-to-kick")) {
                     if (logFile) {
                         StorageUtils.log(Bukkit.getPlayer(player), API.getCurrentDate() + " / " + API.getCurrentTime() + " | " + Bukkit.getPlayer(player).getName() + " was kicked for Reach. His last reach was " + distance + " on ping " + ping + " and tps " + tps);
-                        if(ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
-                            Utils.instance.consoleMessage(prefix+" §a[CONSOLE] §7Sucessfully writing log for "+player, TYPE.MESSAGE);
+                        if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
+                            Utils.instance.consoleMessage(prefix + " §a[CONSOLE] §7Sucessfully writing log for " + player, TYPE.MESSAGE);
                         } else {
-                            Utils.instance.consoleMessage(prefix+" §a[KONSOLE] §7Log für "+player+ "wurde erfolgreich geschrieben", TYPE.MESSAGE);
+                            Utils.instance.consoleMessage(prefix + " §a[KONSOLE] §7Log für " + player + "wurde erfolgreich geschrieben", TYPE.MESSAGE);
                         }
                     }
                     VLReach.remove(Bukkit.getPlayer(player).getUniqueId());
                     if (OWN_KICK_COMMAND) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance).replace("%syntax%", "conditionalcommands:cc %name% if (-ping-<800&-ping->5)&-tps->19.60 do"));
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reachcommand.replace("%name%", player).replace("%prefix%", prefix).replace("&", "§").replace("%reach%", distance));
                     } else {
                         kickPlayer(player, "Reach", distance, type);
                     }
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         if (all.hasPermission(admin)) {
-                            if (API.instance.verbose.contains(all.getName())) {
-                                if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
-                                    all.sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
-                                } else {
-                                    all.sendMessage(prefix + "§a [KONSOLE] §e" + player + "§7 wurde für Reach gekickt");
-                                }
+                            if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
+                                all.sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
+                            } else {
+                                all.sendMessage(prefix + "§a [KONSOLE] §e" + player + "§7 wurde für Reach gekickt");
                             }
                         }
                     }
-                    if (ConfigManager.instance.langfileconf.get("Language.lang").equals("EN")) {
+                    if (ConfigManager.instance.fileconfigfile.get("Language.lang").equals("EN")) {
                         Bukkit.getConsoleSender().sendMessage(prefix + "§a [CONSOLE] §e" + player + "§7 was kicked for Reach");
                     } else {
                         Bukkit.getConsoleSender().sendMessage(prefix + "§a [KONSOLE] §e" + player + "§7 wurde für Reach gekickt");
@@ -404,12 +467,12 @@ public class API {
                         if (all.hasPermission(admin) || all.hasPermission(verbose)) {
                             if (consolelog) {
                                 if (API.instance.verbosemode.contains(all.getName())) {
-                                    all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                    all.sendMessage(check.replace("%player%", player).replace("%description%", description).replace("%reach%", distance).replace("%ping%", String.valueOf(ping)).replace("%tps%", String.valueOf(tps)).replace("%type%", String.valueOf(type)).replace("%vl%", String.valueOf(VL)));
                                 }
-                                Bukkit.getConsoleSender().sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                Bukkit.getConsoleSender().sendMessage(check.replace("%player%", player).replace("%description%", description).replace("%reach%", distance).replace("%ping%", String.valueOf(ping)).replace("%tps%", String.valueOf(tps)).replace("%type%", String.valueOf(type)).replace("%vl%", String.valueOf(VL)));
                             } else {
                                 if (API.instance.verbosemode.contains(all.getName())) {
-                                    all.sendMessage(prefix + " §7" + player + " §7suspected for Reach: " + description + " [Range:" + distance + " Ping:" + ping + " TPS:" + tps + " Check: " + type + " VL: " + VL + "]");
+                                    all.sendMessage(check.replace("%player%", player).replace("%description%", description).replace("%reach%", distance).replace("%ping%", String.valueOf(ping)).replace("%tps%", String.valueOf(tps)).replace("%type%", String.valueOf(type)).replace("%vl%", String.valueOf(VL)));
                                 }
                             }
                         }
