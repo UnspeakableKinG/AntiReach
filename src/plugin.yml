@@ -1,5 +1,5 @@
 name: AntiReach
-version: 5.0-BETA
+version: 5.0
 description: a free and high quality anti reach solution
 authors: [SquareCode, Tomekk, reax]
 main: net.square.main.AntiReach

@@ -30,6 +30,7 @@ public class AntiReach extends JavaPlugin {
         new ModuleManager().setInstance();
         new IDGen().setInstance();
         new StorageUtils().setInstance();
+        new AimUtil().setInstance();
 
         try {
             API.instance.onStart();

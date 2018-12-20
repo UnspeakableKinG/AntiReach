@@ -20,6 +20,7 @@ public class ModuleManager {
         new reach_g();
         new reach_h();
         new reach_i();
+        new reach_j();
     }
 
     public void setInstance() {
