@@ -113,7 +113,7 @@ public class API {
         MAX_REACH_F = ConfigManager.instance.fileconfigfile.getDouble("Checks.F.maxinteract");
         MAX_REACH_G = ConfigManager.instance.fileconfigfile.getDouble("Checks.G.maxreach");
         MAX_REACH_H = ConfigManager.instance.fileconfigfile.getDouble("Checks.H.maxreach");
-        MAX_REACH_H = ConfigManager.instance.fileconfigfile.getDouble("Checks.I.maxreach");
+        MAX_REACH_I = ConfigManager.instance.fileconfigfile.getDouble("Checks.I.maxreach");
         REACH_A = ConfigManager.instance.fileconfigfile.getBoolean("Checks.A.enable");
         REACH_B = ConfigManager.instance.fileconfigfile.getBoolean("Checks.B.enable");
         REACH_C = ConfigManager.instance.fileconfigfile.getBoolean("Checks.C.enable");
@@ -262,7 +262,7 @@ public class API {
     public void setDefaults() {
         for (final Player all : Bukkit.getOnlinePlayers()) {
             if (!ID.containsKey(all.getUniqueId())) {
-                ID.put(all.getUniqueId(), IDGen.instance.generateRandom(5, true, true));
+                ID.put(all.getUniqueId(), "ar-"+IDGen.instance.generateRandom(5, true, false)+"-"+IDGen.instance.generateRandom(5, true, false)+"-"+IDGen.instance.generateRandom(5, true, false));
             }
             if (!API.VLReach.containsKey(all.getUniqueId())) {
                 API.VLReach.put(all.getUniqueId(), 0);

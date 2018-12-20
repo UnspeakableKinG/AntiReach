@@ -19,7 +19,7 @@ public class JoinListener implements Listener {
             API.VLReach.put(p.getUniqueId(), 0);
         }
         if (!API.instance.ID.containsKey(p.getUniqueId())) {
-            API.instance.ID.put(p.getUniqueId(), IDGen.instance.generateRandom(5, true, true));
+            API.instance.ID.put(p.getUniqueId(), "ar-"+IDGen.instance.generateRandom(5, true, false)+"-"+IDGen.instance.generateRandom(5, true, false)+"-"+IDGen.instance.generateRandom(5, true, false));
         }
         if (p.hasPermission(API.instance.admin)) {
             if (API.instance.checkUpdate) {

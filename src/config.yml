@@ -56,7 +56,7 @@ Checks:
     maxreach: 4.0
   I:
     enable: true
-    maxreach: 3.9
+    maxreach: 4.0
 
 Language:
   #You can change the language to: DE, EN
