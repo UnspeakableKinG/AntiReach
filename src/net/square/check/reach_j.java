@@ -40,7 +40,7 @@ public class reach_j extends Module {
                         final double YawDifference = Math.abs(180.0f - Math.abs(damaged.getLocation().getYaw() - player.getLocation().getYaw()));
                         double Difference = MathUtil.instance.getEyeLocation(player).distance(damaged.getEyeLocation()) - 0.35;
                         final int Ping = ((CraftPlayer) player).getHandle().ping;
-                        double MaxReach = API.instance.MAX_REACH_H + damaged.getVelocity().length();
+                        double MaxReach = API.instance.MAX_REACH_J + damaged.getVelocity().length();
                         if (player.isSprinting()) {
                             MaxReach += 0.2;
                         }
@@ -66,7 +66,7 @@ public class reach_j extends Module {
                                 int ping = ((CraftPlayer) player).getHandle().ping;
                                 double tps = TPSManager.instance.getTPS();
                                 event.setCancelled(true);
-                                API.instance.pokeReach(player.getName(), "wrong heuristics + reach", ddistance, ping, tps, ReachType.J, API.VLReach.get(player.getUniqueId()));
+                                API.instance.pokeReach(player.getName(), "wrong heuristics + reach <"+API.instance.MAX_REACH_J, ddistance, ping, tps, ReachType.J, API.VLReach.get(player.getUniqueId()));
                             }
                         }
                     }

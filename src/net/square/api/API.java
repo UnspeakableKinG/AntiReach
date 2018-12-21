@@ -68,6 +68,7 @@ public class API {
     public double MAX_REACH_G;
     public double MAX_REACH_H;
     public double MAX_REACH_I;
+    public double MAX_REACH_J;
     public boolean consolelog;
     public boolean startlog;
     public boolean ownmessage;
@@ -81,6 +82,7 @@ public class API {
     public boolean REACH_G;
     public boolean REACH_H;
     public boolean REACH_I;
+    public boolean REACH_J;
     public boolean logFile;
     public boolean OWN_KICK_COMMAND;
     public boolean checkUpdate;
@@ -114,6 +116,7 @@ public class API {
         MAX_REACH_G = ConfigManager.instance.fileconfigfile.getDouble("Checks.G.maxreach");
         MAX_REACH_H = ConfigManager.instance.fileconfigfile.getDouble("Checks.H.maxreach");
         MAX_REACH_I = ConfigManager.instance.fileconfigfile.getDouble("Checks.I.maxreach");
+        MAX_REACH_J = ConfigManager.instance.fileconfigfile.getDouble("Checks.J.maxreach");
         REACH_A = ConfigManager.instance.fileconfigfile.getBoolean("Checks.A.enable");
         REACH_B = ConfigManager.instance.fileconfigfile.getBoolean("Checks.B.enable");
         REACH_C = ConfigManager.instance.fileconfigfile.getBoolean("Checks.C.enable");
@@ -123,6 +126,7 @@ public class API {
         REACH_G = ConfigManager.instance.fileconfigfile.getBoolean("Checks.G.enable");
         REACH_H = ConfigManager.instance.fileconfigfile.getBoolean("Checks.H.enable");
         REACH_I = ConfigManager.instance.fileconfigfile.getBoolean("Checks.I.enable");
+        REACH_J = ConfigManager.instance.fileconfigfile.getBoolean("Checks.J.enable");
         logFile = ConfigManager.instance.fileconfigfile.getBoolean("Settings.logFile");
         startlog = ConfigManager.instance.fileconfigfile.getBoolean("Settings.startLog");
         checkUpdate = ConfigManager.instance.fileconfigfile.getBoolean("Settings.checkUpdate");
